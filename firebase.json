@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "aegis-vanbransa",
     "public": ".",
     "ignore": [
       "firebase.json",
