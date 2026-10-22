@@ -149,6 +149,28 @@
             </div>
             <span class="px-1.5 py-0.5 text-[10px] font-mono rounded bg-orange-500/20 text-orange-300 border border-orange-500/30">AI</span>
           </a>
+
+          <a href="#/mint" data-route="/mint" class="nav-link w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all flex items-center justify-between group">
+            <div class="flex items-center gap-3">
+              <i data-lucide="qr-code" class="w-4 h-4 shrink-0 text-emerald-400"></i>
+              <div>
+                <span class="block leading-tight">Mint &amp; Stamp Bind</span>
+                <span class="text-[10px] text-stone-500 font-mono block">/mint • Bottler &amp; KRA HSM</span>
+              </div>
+            </div>
+            <span class="px-1.5 py-0.5 text-[10px] font-mono rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">HSM</span>
+          </a>
+
+          <a href="#/dooh" data-route="/dooh" class="nav-link w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all flex items-center justify-between group">
+            <div class="flex items-center gap-3">
+              <i data-lucide="monitor-play" class="w-4 h-4 shrink-0 text-orange-400"></i>
+              <div>
+                <span class="block leading-tight">VANBRANSA DOOH</span>
+                <span class="text-[10px] text-stone-500 font-mono block">/dooh • Smart Billboards</span>
+              </div>
+            </div>
+            <span class="px-1.5 py-0.5 text-[10px] font-mono rounded bg-orange-500/20 text-orange-300 border border-orange-500/30">5 LED</span>
+          </a>
         </nav>
       </div>
 
@@ -227,11 +249,11 @@
       </button>
 
       <div class="flex items-center justify-between text-[10px] font-mono text-stone-400 px-1">
-        <span class="inline-flex items-center gap-1.5 text-orange-400">
-          <span class="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
-          VANBRANSA DOOH NET
+        <span id="pwa-sync-status" class="inline-flex items-center gap-1.5 text-emerald-400">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          CLOUD + OFFLINE PWA
         </span>
-        <span>AEGIS v4.2</span>
+        <span>AEGIS v4.6</span>
       </div>
     </div>
   </aside>
@@ -271,9 +293,11 @@
 
         <!-- Top Right Navigation Links Matching Screenshot -->
         <div class="flex items-center gap-6">
-          <nav class="hidden md:flex items-center gap-7 text-sm font-medium">
+          <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
             <a href="#/blueprint" data-route="/blueprint" class="top-nav-link">Blueprint</a>
             <a href="#/trade" data-route="/trade" class="top-nav-link">Trade</a>
+            <a href="#/mint" data-route="/mint" class="top-nav-link">Mint Batch</a>
+            <a href="#/dooh" data-route="/dooh" class="top-nav-link">DOOH Screens</a>
             <a href="#/reports" data-route="/reports" class="top-nav-link flex items-center gap-1.5">
               <i data-lucide="sparkles" class="w-3.5 h-3.5 text-orange-400"></i>
               <span>AI Reports</span>
@@ -305,10 +329,12 @@
           <span>•</span>
           <span><strong class="text-stone-200 tracking-wider">AEGIS</strong> Anti-Counterfeit &amp; DOOH Telemetry Network</span>
         </div>
-        <div class="flex items-center gap-5 font-mono">
+        <div class="flex flex-wrap items-center gap-4 font-mono">
           <a href="#/" class="hover:text-orange-400 transition-colors">Overview</a>
           <a href="#/blueprint" class="hover:text-orange-400 transition-colors">Blueprint</a>
           <a href="#/trade" class="hover:text-orange-400 transition-colors">Trade</a>
+          <a href="#/mint" class="hover:text-orange-400 transition-colors">Mint Batch</a>
+          <a href="#/dooh" class="hover:text-orange-400 transition-colors">DOOH Screens</a>
           <a href="#/reports" class="hover:text-orange-400 transition-colors">AI Reports</a>
           <a href="#/verify" class="hover:text-orange-400 transition-colors">Verify</a>
           <a href="#/login" class="hover:text-orange-400 transition-colors">Console ↗</a>

@@ -452,5 +452,126 @@ window.SENTINEL_DATA = {
         prompt: "Design a VANBRANSA Digital Out-Of-Home (DOOH) billboard awareness strategy targeting high-risk counties to boost consumer bottle scanning."
       }
     ]
-  }
+  },
+
+  mintedBatches: [
+    {
+      batchId: "B26-AEG-09",
+      sampleSerial: "SNT-FA24-57D2-13EE-EC26",
+      productName: "Aegis Reserve Whisky 750ml",
+      brand: "Aegis Distillers Kenya Ltd",
+      facility: "Ruaraka High-Speed Bottling Line #2, Nairobi",
+      stampReel: "KRA-EX-9940128-REEL04",
+      unitCount: 12000,
+      targetZone: "Nakuru & Rift Valley Retail",
+      ecdsaKeyId: "HSM-KE-NRB-09A4",
+      mintedAt: "2026-10-14 07:42 EAT",
+      status: "ACTIVE • POS RETIREMENT ENABLED"
+    },
+    {
+      batchId: "B26-EABL-402",
+      sampleSerial: "AEG-2026-8841-KEN",
+      productName: "Tusker Malt Premium Lager 330ml",
+      brand: "Kenya Breweries Ltd (EABL)",
+      facility: "Ruaraka Line #4, Nairobi",
+      stampReel: "KRA-EX-9920184-REEL19",
+      unitCount: 48000,
+      targetZone: "Nairobi Metro & Westlands",
+      ecdsaKeyId: "HSM-KE-NRB-01F2",
+      mintedAt: "2026-09-14 08:12 EAT",
+      status: "VERIFIED • IN CIRCULATION"
+    },
+    {
+      batchId: "B26-KWL-118",
+      sampleSerial: "AEG-2026-4410-IMP",
+      productName: "Leleshwa Reserve Sauvignon Blanc 750ml",
+      brand: "Kenya Wine Agencies Ltd (KWAL)",
+      facility: "Naivasha Estate Bottling Line #1",
+      stampReel: "KRA-EX-7731904-REEL02",
+      unitCount: 6500,
+      targetZone: "Coast & Nairobi Hospitality",
+      ecdsaKeyId: "HSM-KE-NVS-04C8",
+      mintedAt: "2026-08-22 10:15 EAT",
+      status: "VERIFIED • IN CIRCULATION"
+    }
+  ],
+
+  doohBillboards: [
+    {
+      screenId: "VNB-NRB-01",
+      name: "Kariobangi & Outering Road Mega LED",
+      county: "Nairobi County",
+      coordinates: "-1.2543, 36.8821",
+      format: "12m × 4m Roadside Digital Gantry (4K NIT)",
+      dailyImpressions: "184,000",
+      localRiskScore: 98,
+      activeMode: "EMERGENCY_ALERT",
+      headline: "COUNTERFEIT SPIRIT BATCH DETECTED IN EASTLANDS",
+      subheadline: "Cloned KRA water stamps found on Royal Crown Gin (AEG-FAKE-0013-CLN). Scan your bottle QR before buying.",
+      ctaText: "SCAN BOTTLE NECK NOW • AEGIS LIVE VERIFY",
+      targetSerial: "AEG-FAKE-0013-CLN",
+      lastSynced: "12 secs ago"
+    },
+    {
+      screenId: "VNB-NAK-02",
+      name: "Nakuru Kenyatta Avenue Nightlife LED",
+      county: "Nakuru County",
+      coordinates: "-0.2827, 36.0666",
+      format: "9m × 3m Dual-Sided Smart Totem",
+      dailyImpressions: "112,500",
+      localRiskScore: 74,
+      activeMode: "REFILL_WARNING",
+      headline: "WATCH OUT FOR REFILLED NIGHTCLUB BOTTLES",
+      subheadline: "Aegis flagged 19 post-retirement scans (ALREADY OPENED • RISK 74) in Nakuru CBD. Check tamper bridge & scan QR.",
+      ctaText: "CHECK IF BOTTLE WAS ALREADY OPENED",
+      targetSerial: "SNT-FA24-57D2-13EE-EC26",
+      lastSynced: "28 secs ago"
+    },
+    {
+      screenId: "VNB-NRB-03",
+      name: "Westlands Waiyaki Way Digital Unipole",
+      county: "Nairobi County",
+      coordinates: "-1.2635, 36.8032",
+      format: "14m × 5m Curved DOOH Spectacular",
+      dailyImpressions: "245,000",
+      localRiskScore: 22,
+      activeMode: "BRAND_TRUST",
+      headline: "EVERY GENUINE BOTTLE CARRIES A CRYPTOGRAPHIC IDENTITY",
+      subheadline: "Co-protected by VANBRANSA Digital Out-Of-Home & Aegis Anti-Counterfeit Infrastructure. Instant 150ms phone check.",
+      ctaText: "VERIFY YOUR BEVERAGE IN 1 TAP",
+      targetSerial: "AEG-2026-8841-KEN",
+      lastSynced: "45 secs ago"
+    },
+    {
+      screenId: "VNB-BUS-04",
+      name: "Busia One-Stop Border Post Highway Screen",
+      county: "Busia County",
+      coordinates: "0.4608, 34.1115",
+      format: "10m × 4m Cross-Border Transit LED",
+      dailyImpressions: "76,000",
+      localRiskScore: 84,
+      activeMode: "EMERGENCY_ALERT",
+      headline: "BORDER EXCISE ENFORCEMENT: UNSTAMPED ETHANOL INTERCEPTED",
+      subheadline: "Distributors & retailers: verify wholesale case serials before accepting delivery to avoid immediate license suspension.",
+      ctaText: "RETAILER BATCH CHECK • AEGIS CONSOLE",
+      targetSerial: "AEG-FAKE-0013-CLN",
+      lastSynced: "1 min ago"
+    },
+    {
+      screenId: "VNB-MBA-05",
+      name: "Mombasa Nyali Bridge Approach Digital Board",
+      county: "Mombasa County",
+      coordinates: "-4.0435, 39.6682",
+      format: "12m × 4m Coastal Highway LED",
+      dailyImpressions: "158,000",
+      localRiskScore: 68,
+      activeMode: "REFILL_WARNING",
+      headline: "EXPORT-ONLY SPIRITS DIVERTED TO COASTAL RETAIL",
+      subheadline: "Verify KRA digital stamp geofence before purchase. Report suspicious transit stock anonymously via Aegis.",
+      ctaText: "SCAN STAMP & VERIFY MARKET ZONE",
+      targetSerial: "AEG-2026-4410-IMP",
+      lastSynced: "1 min ago"
+    }
+  ]
 };
+
