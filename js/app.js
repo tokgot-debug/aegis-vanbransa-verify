@@ -395,7 +395,7 @@
               </p>
 
               <!-- Primary CTA Buttons matching screenshot -->
-              <div class="flex flex-wrap items-center gap-4 pt-2">
+              <div class="flex flex-wrap items-center gap-3.5 pt-2">
                 <a
                   href="#/verify"
                   class="inline-flex items-center gap-2.5 px-6 py-3.5 rounded bg-[#f97316] hover:bg-[#fb923c] text-black font-bold text-sm transition-all shadow-xl shadow-orange-500/20"
@@ -406,10 +406,28 @@
 
                 <a
                   href="#/blueprint"
-                  class="inline-flex items-center gap-2.5 px-6 py-3.5 rounded bg-transparent hover:bg-orange-500/10 border border-orange-500/35 text-orange-400 font-semibold text-sm transition-all"
+                  class="inline-flex items-center gap-2.5 px-5 py-3.5 rounded bg-transparent hover:bg-orange-500/10 border border-orange-500/35 text-orange-400 font-semibold text-sm transition-all"
                 >
                   <span>Read the blueprint</span>
                   <span class="font-mono">↗</span>
+                </a>
+
+                <a
+                  href="aegis-vanbransa-pitch-deck.pptx"
+                  download="AEGIS-VANBRANSA-Pitch-Deck.pptx"
+                  class="inline-flex items-center gap-2 px-4 py-3.5 rounded bg-[#14110f] hover:bg-stone-800 border border-stone-700 text-stone-200 font-mono text-xs font-semibold transition-all"
+                >
+                  <i data-lucide="presentation" class="w-4 h-4 text-orange-400"></i>
+                  <span>Pitch Deck (.pptx)</span>
+                </a>
+
+                <a
+                  href="pitch-deck.html"
+                  target="_blank"
+                  rel="noopener"
+                  class="inline-flex items-center gap-1.5 px-4 py-3.5 rounded bg-[#14110f] hover:bg-stone-800 border border-stone-700 text-orange-300 font-mono text-xs font-semibold transition-all"
+                >
+                  <span>Slide Viewer ↗</span>
                 </a>
               </div>
 
@@ -2052,9 +2070,26 @@
             </div>
             <div class="flex flex-wrap items-center gap-2">
               <a
+                href="aegis-vanbransa-pitch-deck.pptx"
+                download="AEGIS-VANBRANSA-Pitch-Deck.pptx"
+                class="px-3.5 py-2 rounded-lg bg-[#f97316] hover:bg-[#fb923c] text-black font-bold text-xs font-mono flex items-center gap-1.5 shadow-lg shadow-orange-500/20 transition-all"
+              >
+                <i data-lucide="presentation" class="w-3.5 h-3.5"></i>
+                <span>Download Pitch Deck (.pptx)</span>
+              </a>
+              <a
+                href="pitch-deck.html"
+                target="_blank"
+                rel="noopener"
+                class="px-3.5 py-2 rounded-lg bg-[#14110f] hover:bg-stone-800 text-orange-300 border border-orange-500/40 font-mono text-xs flex items-center gap-1.5 transition-all"
+              >
+                <i data-lucide="monitor-play" class="w-3.5 h-3.5 text-orange-400"></i>
+                <span>Open 10-Slide Pitch Deck ↗</span>
+              </a>
+              <a
                 href="aegis-platform-audit.csv"
                 download="aegis-vanbransa-platform-audit-results.csv"
-                class="px-3.5 py-2 rounded-lg bg-[#f97316] hover:bg-[#fb923c] text-black font-bold text-xs font-mono flex items-center gap-1.5 shadow-lg shadow-orange-500/20 transition-all"
+                class="px-3.5 py-2 rounded-lg bg-[#14110f] hover:bg-stone-800 text-emerald-300 border border-emerald-500/40 font-mono text-xs flex items-center gap-1.5 transition-all"
               >
                 <i data-lucide="download" class="w-3.5 h-3.5"></i>
                 <span>Download Audit CSV</span>

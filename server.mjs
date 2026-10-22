@@ -14,7 +14,9 @@ const MIME_TYPES = {
   '.json': 'application/json; charset=utf-8',
   '.png': 'image/png',
   '.svg': 'image/svg+xml',
-  '.ico': 'image/x-icon'
+  '.ico': 'image/x-icon',
+  '.csv': 'text/csv; charset=utf-8',
+  '.pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
 };
 
 const server = http.createServer((req, res) => {

@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AEGIS × VANBRANSA — Executive Pitch Deck (10 Slides)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #080706;
+      --surface: #120F0D;
+      --card: #1A1512;
+      --border: #33261E;
+      --amber: #F97316;
+      --amber-light: #FB923C;
+      --gold: #F59E0B;
+      --green: #10B981;
+      --red: #EF4444;
+      --blue: #38BDF8;
+      --text: #FFFBF7;
+      --muted: #A89F96;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+    /* Top Toolbar */
+    .deck-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 24px;
+      background: rgba(18, 15, 13, 0.92);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .brand-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-bar img {
+      height: 36px;
+      border-radius: 6px;
+      border: 1px solid rgba(249, 115, 22, 0.35);
+    }
+    .brand-bar-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      letter-spacing: 0.03em;
+    }
+    .brand-bar-sub {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--amber-light);
+    }
+    .toolbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 16px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      transition: all 0.18s ease;
+    }
+    .btn:hover {
+      border-color: var(--amber);
+      transform: translateY(-1px);
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #F97316, #EA580C);
+      color: #080706;
+      border-color: #FB923C;
+      font-weight: 700;
+      box-shadow: 0 4px 16px rgba(249, 115, 22, 0.3);
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #FB923C, #F97316);
+    }
+
+    /* Slide Stage */
+    .stage-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      position: relative;
+    }
+    .slide-container {
+      width: 100%;
+      max-width: 1200px;
+      aspect-ratio: 16 / 9;
+      position: relative;
+    }
+    .slide {
+      display: none;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 88% 12%, rgba(249, 115, 22, 0.12), transparent 45%),
+                  linear-gradient(160deg, #0D0A08 0%, #080706 100%);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 42px 52px 56px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.75);
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .slide.active {
+      display: flex;
+    }
+    .slide::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--amber), var(--gold), var(--green));
+    }
+
+    /* Slide Header */
+    .slide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+      border-bottom: 1px solid rgba(249, 115, 22, 0.18);
+      padding-bottom: 16px;
+      margin-bottom: 20px;
+    }
+    .slide-kicker {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--amber);
+      margin-bottom: 6px;
+      display: block;
+    }
+    .slide-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.45rem, 2.4vw, 2.15rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+    }
+    .slide-subtitle {
+      font-size: 0.92rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+    .slide-logo {
+      height: 44px;
+      border-radius: 8px;
+      border: 1px solid rgba(249, 115, 22, 0.3);
+      flex-shrink: 0;
+    }
+
+    /* Slide Content Layouts */
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 18px;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+    .card {
+      background: rgba(26, 21, 18, 0.88);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 20px;
+      position: relative;
+    }
+    .card.accent-amber { border-top: 3px solid var(--amber); }
+    .card.accent-green { border-top: 3px solid var(--green); }
+    .card.accent-red { border-top: 3px solid var(--red); }
+    .card.accent-blue { border-top: 3px solid var(--blue); }
+    .card.accent-gold { border-top: 3px solid var(--gold); }
+
+    .card-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 3px 8px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 8px;
+      background: rgba(249, 115, 22, 0.14);
+      color: var(--amber-light);
+    }
+    .card h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.05rem;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+    .card p, .card li {
+      font-size: 0.83rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .card ul {
+      padding-left: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .kpi-val {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+    .kpi-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    /* Slide Footer */
+    .slide-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 12px;
+      border-top: 1px solid rgba(51, 38, 30, 0.7);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 14px;
+    }
+
+    /* Navigation Controls */
+    .deck-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+    }
+    .dots {
+      display: flex;
+      gap: 8px;
+    }
+    .dot {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--muted);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+    }
+    .dot.active, .dot:hover {
+      background: var(--amber);
+      color: #080706;
+      border-color: var(--amber-light);
+      font-weight: 700;
+    }
+
+    /* Table inside slide */
+    .pitch-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+    }
+    .pitch-table th, .pitch-table td {
+      padding: 9px 12px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+    .pitch-table th {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      color: var(--amber-light);
+      background: rgba(249, 115, 22, 0.08);
+    }
+
+    @media print {
+      body { background: #080706 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .deck-toolbar, .deck-controls { display: none !important; }
+      .stage-wrapper { padding: 0; }
+      .slide-container { max-width: 100%; aspect-ratio: auto; }
+      .slide {
+        display: flex !important;
+        page-break-after: always;
+        break-after: page;
+        height: 100vh;
+        border-radius: 0;
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Toolbar -->
+  <header class="deck-toolbar">
+    <div class="brand-bar">
+      <img src="assets/vanbransa-logo.png" alt="VANBRANSA Logo" />
+      <div>
+        <div class="brand-bar-title">AEGIS × VANBRANSA — EXECUTIVE PITCH DECK</div>
+        <div class="brand-bar-sub">10-SLIDE WIDESCREEN PRESENTATION • .PPTX &amp; INTERACTIVE VIEWER</div>
+      </div>
+    </div>
+    <div class="toolbar-actions">
+      <a class="btn btn-primary" href="/aegis-vanbransa-pitch-deck.pptx" download="AEGIS-VANBRANSA-Pitch-Deck.pptx">
+        ⬇ Download PowerPoint (.pptx)
+      </a>
+      <button class="btn" onclick="window.print()">🖨 Print / Save as PDF</button>
+      <button class="btn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
+      <a class="btn" href="/#/reports">← Back to Platform</a>
+    </div>
+  </header>
+
+  <!-- Slide Stage -->
+  <main class="stage-wrapper">
+    <div class="slide-container" id="slide-container">
+
+      <!-- SLIDE 1: COVER -->
+      <section class="slide active" data-slide="1">
+        <div class="slide-header">
+          <div>
+            <span class="slide-kicker">INVESTOR &amp; ENTERPRISE REGULATOR BRIEFING • 2026</span>
+            <h1 class="slide-title" style="font-size:2.6rem;">AEGIS × VANBRANSA</h1>
+            <p class="slide-subtitle" style="color:var(--amber-light);font-weight:600;">Cryptographic Anti-Counterfeit Infrastructure &amp; DOOH Verified Media Platform</p>
+          </div>
+          <img class="slide-logo" src="assets/vanbransa-logo.png" alt="VANBRANSA" />
+        </div>
+        <div class="slide-body">
+          <div class="card accent-amber" style="padding:22px;">
+            <p style="font-size:0.98rem;color:var(--text);line-height:1.6;">
+              Protecting public health and excise tax integrity across East Africa by uniting <strong>zero-app consumer QR/NFC verification</strong>, <strong>HMAC-SHA256 tamper-evident serialization</strong>, <strong>AI fraud telemetry</strong>, and <strong>self-funding DOOH post-scan brand ad slots</strong>.
+            </p>
+          </div>
+          <div class="grid-4">
+            <div class="card accent-green">
+              <div class="kpi-val" style="color:var(--green);">30,000+</div>
+              <div class="kpi-label">Serialized Units</div>
+              <p>Cryptographic batch lineage across Nairobi, Mombasa &amp; Kisumu.</p>
+            </div>
+            <div class="card accent-amber">
+              <div class="kpi-val" style="color:var(--amber);">&lt; 180ms</div>
+              <div class="kpi-label">Zero-App Scan Speed</div>
+              <p>Instant browser-native QR, NFC NTAG424 &amp; Manual PIN verification.</p>
+            </div>
+            <div class="card accent-gold">
+              <div class="kpi-val" style="color:var(--gold);">3.4% CTR</div>
+              <div class="kpi-label">Post-Scan DOOH Media</div>
+              <p>Verified consumer attention monetized on every authentic scan.</p>
+            </div>
+            <div class="card accent-blue">
+              <div class="kpi-val" style="color:var(--blue);">14 / 14</div>
+              <div class="kpi-label">Audited Modules</div>
+              <p>100% functional customer journey &amp; live regulator dispatch.</p>
+            </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>AEGIS × VANBRANSA • CONFIDENTIAL EXECUTIVE DECK</span>
+          <span>https://aegis-vanbransa.web.app • SLIDE 01 / 10</span>
+        </div>
+      </section>
+
+      <!-- SLIDE 2: THE PROBLEM -->
+      <section class="slide" data-slide="2">
+        <div class="slide-header">
+          <div>
+            <span class="slide-kicker">01 • MARKET PROBLEM</span>
+            <h2 class="slide-title">THE $1.2B ILLICIT TRADE &amp; COUNTERFEIT CRISIS</h2>
+            <p class="slide-subtitle">Why legacy paper tax stamps and static QR codes fail brands, consumers, and regulators</p>
+          </div>
+          <img class="slide-logo" src="assets/vanbransa-logo.png" alt="VANBRANSA" />
+        </div>
+        <div class="slide-body">
+          <div class="grid-3">
+            <div class="card accent-red">
+              <span class="card-badge" style="color:var(--red);background:rgba(239,68,68,0.15);">PUBLIC HEALTH RISK</span>
+              <h3>32% Counterfeit Penetration</h3>
+              <ul>
+                <li>Illicit spirits (methanol spiking) and falsified essential pharmaceuticals cause thousands of hospitalizations annually.</li>
+                <li>Static printed QR codes and holographic stickers are easily photocopied in informal markets.</li>
+                <li>Consumers have zero reliable point-of-purchase verification tool.</li>
+              </ul>
+            </div>
+            <div class="card accent-amber">
+              <span class="card-badge">EXCISE &amp; BRAND EROSION</span>
+              <h3>$480M+ Annual Tax Leakage</h3>
+              <ul>
+                <li>Manufacturers lose 18–25% of gross revenue to parallel grey-market diversion and refill syndicates.</li>
+                <li>Regulators (KRA, KEBS, PPB, ACA) lack real-time GPS visibility into where fake batches enter retail.</li>
+                <li>Field enforcement raids are reactive and weeks late.</li>
+              </ul>
+            </div>
+            <div class="card accent-gold">
+              <span class="card-badge">APP DOWNLOAD FRICTION</span>
+              <h3>94% Consumer Drop-Off</h3>
+              <ul>
+                <li>Legacy verification apps require consumers to download a 45MB mobile app just to check one bottle or medicine pack.</li>
+                <li>Security systems are viewed purely as a dead-weight cost center rather than a revenue-generating media channel.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>AEGIS × VANBRANSA • MARKET PROBLEM</span>
+          <span>SLIDE 02 / 10</span>
+        </div>
+      </section>
+
+      <!-- SLIDE 3: THE SOLUTION -->
+      <section class="slide" data-slide="3">
+        <div class="slide-header">
+          <div>
+            <span class="slide-kicker">02 • THE AEGIS × VANBRANSA SOLUTION</span>
+            <h2 class="slide-title">ZERO-APP VERIFICATION + SELF-FUNDING DOOH MEDIA</h2>
+            <p class="slide-subtitle">Four interlocking pillars transforming product authentication into a high-margin network</p>
+          </div>
+          <img class="slide-logo" src="assets/vanbransa-logo.png" alt="VANBRANSA" />
+        </div>
+        <div class="slide-body">
+          <div class="grid-2">
+            <div class="card accent-green">
+              <span class="card-badge" style="color:var(--green);background:rgba(16,185,129,0.15);">PILLAR 1 • CRYPTOGRAPHIC SERIALIZATION</span>
+              <h3>HMAC-SHA256 + Scratch PIN + NFC NTAG424</h3>
+              <p>Every unit receives a unique cryptographic serial, tamper-evident scratch PIN, and optional NFC DNA sun-message signature tied to factory batch metadata.</p>
+            </div>
+            <div class="card accent-amber">
+              <span class="card-badge">PILLAR 2 • ZERO-APP CONSUMER PORTAL</span>
+              <h3>Sub-Second Web Verification + USSD / SMS</h3>
+              <p>Works instantly in any mobile browser via camera QR scan, Web NFC tap, or manual code entry—plus offline USSD (*384*88#) and SMS fallback.</p>
+            </div>
+            <div class="card accent-blue">
+              <span class="card-badge" style="color:var(--blue);background:rgba(56,189,248,0.15);">PILLAR 3 • AI ANOMALY &amp; GEOSPATIAL RADAR</span>
+              <h3>Real-Time Impossible-Travel &amp; Replay Detection</h3>
+              <p>Detects multi-city scan velocity spikes, PIN brute-forcing, and counterfeit hotspots across Nairobi, Mombasa, and Kisumu in real time.</p>
+            </div>
+            <div class="card accent-gold">
+              <span class="card-badge">PILLAR 4 • VANBRANSA DOOH MEDIA AD SERVER</span>
+              <h3>Monetizing the Post-Scan Trust Moment</h3>
+              <p>Every verified scan renders a high-trust post-scan brand sponsorship card &amp; 1-tap reward claim, turning compliance into an ROI-positive ad channel.</p>
+            </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>AEGIS × VANBRANSA • SOLUTION ARCHITECTURE</span>
+          <span>SLIDE 03 / 10</span>
+        </div>
+      </section>
+
+      <!-- SLIDE 4: CUSTOMER JOURNEY -->
+      <section class="slide" data-slide="4">
+        <div class="slide-header">
+          <div>
+            <span class="slide-kicker">03 • END-TO-END CUSTOMER JOURNEY</span>
+            <h2 class="slide-title">CLOSED-LOOP VERIFICATION &amp; ENFORCEMENT FLOW</h2>
+            <p class="slide-subtitle">Every consumer scan automatically updates telemetry, AI analytics, DOOH impressions, and regulator cases</p>
+          </div>
+          <img class="slide-logo" src="assets/vanbransa-logo.png" alt="VANBRANSA" />
+        </div>
+        <div class="slide-body">
+          <div class="grid-3">
+            <div class="card accent-amber">
+              <span class="card-badge">STEP 01 • FACTORY</span>
+              <h3>Batch Minting</h3>
+              <p>Manufacturer mints cryptographic batch in <code>#/batches</code> with GS1 GTIN, KEBS/KRA permit IDs, and lab COA certificate.</p>
+            </div>
+            <div class="card accent-green">
+              <span class="card-badge">STEP 02 • CONSUMER SCAN</span>
+              <h3>QR / NFC / PIN Check</h3>
+              <p>Consumer scans pack in <code>#/verify</code>. Edge engine checks HMAC signature, expiry, recall status, and scan velocity.</p>
+            </div>
+            <div class="card accent-blue">
+              <span class="card-badge">STEP 03 • TRUST VERDICT</span>
+              <h3>Green / Amber / Red</h3>
+              <p>Instant Authentic, Suspicious Duplicate, or Counterfeit/Recalled verdict with provenance chain &amp; lab test modal.</p>
+            </div>
+            <div class="card accent-gold">
+              <span class="card-badge">STEP 04 • DOOH REWARD</span>
+              <h3>Post-Scan Media Slot</h3>
+              <p>Authentic scans trigger a targeted VANBRANSA sponsor banner + instant loyalty points voucher.</p>
+            </div>
+            <div class="card accent-red">
+              <span class="card-badge" style="color:var(--red);background:rgba(239,68,68,0.15);">STEP 05 • WHISTLEBLOWER</span>
+              <h3>1-Click Fraud Escalation</h3>
+              <p>Failed or suspicious scans pre-fill the Whistleblower &amp; Field Inspector Form with GPS &amp; photo hash.</p>
+            </div>
+            <div class="card accent-amber">
+              <span class="card-badge">STEP 06 • REGULATOR RAID</span>
+              <h3>ACA / KEBS / PPB Dispatch</h3>
+              <p>Case lands in <code>#/cases</code> &amp; <code>#/reports</code> AI engine for instant batch quarantine or regulator dispatch.</p>
+            </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>AEGIS × VANBRANSA • UNIFIED CUSTOMER JOURNEY</span>
+          <span>SLIDE 04 / 10</span>
+        </div>
+      </section>
+
+      <!-- SLIDE 5: CRYPTOGRAPHIC & AI ARCHITECTURE -->
+      <section class="slide" data-slide="5">
+        <div class="slide-header">
+          <div>
+            <span class="slide-kicker">04 • DEEP-TECH DEFENSE LAYER</span>
+            <h2 class="slide-title">CRYPTOGRAPHIC &amp; AI THREAT ENGINE</h2>
+            <p class="slide-subtitle">Multi-layered defense against label cloning, bottle refilling, and syndicate distribution</p>
+          </div>
+          <img class="slide-logo" src="assets/vanbransa-logo.png" alt="VANBRANSA" />
+        </div>
+        <div class="slide-body">
+          <div class="grid-2">
+            <div class="card accent-amber">
+              <span class="card-badge">CRYPTOGRAPHIC SECURITY STACK</span>
+              <h3>Unclonable Unit Identity</h3>
+              <ul>
+                <li><strong>Dual-Factor Serialization:</strong> Public QR serial + hidden under-scratch 6-digit PIN + HMAC-SHA256 cryptographic signature.</li>
+                <li><strong>NFC NTAG424 DNA Support:</strong> Tap-unique SUN (Secure Unique NFC) counter increments on every physical tap.</li>
+                <li><strong>Lab Certificate of Analysis (COA):</strong> Cryptographic SHA-256 hash linking every retail unit to ISO/IEC 17025 lab test results.</li>
+                <li><strong>Emergency Kill-Switch:</strong> 1-click batch quarantine immediately turns all downstream consumer scans to Red Alert.</li>
+              </ul>
+            </div>
+            <div class="card accent-blue">
+              <span class="card-badge" style="color:var(--blue);background:rgba(56,189,248,0.15);">AI &amp; HEURISTIC RISK SCORING</span>
+              <h3>0–100 Real-Time Anomaly Score</h3>
+              <ul>
+                <li><strong>Impossible Travel Detection:</strong> Flags identical serials scanned in Nairobi and Mombasa within minutes (Risk Score: 86–98/100).</li>
+                <li><strong>Brute-Force PIN Throttling:</strong> Rate-limits IP/device fingerprints attempting sequential serial enumeration.</li>
+                <li><strong>AI Intelligence Analyst (<code>#/reports</code>):</strong> Interactive natural-language query console, 7-day predictive surge forecasting, and automated executive brief exports.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>AEGIS × VANBRANSA • CRYPTOGRAPHIC &amp; AI ENGINE</span>
+          <span>SLIDE 05 / 10</span>
+        </div>
+      </section>
+
+      <!-- SLIDE 6: DOOH MEDIA MONETIZATION -->
+      <section class="slide" data-slide="6">
+        <div class="slide-header">
+          <div>
+            <span class="slide-kicker">05 • VANBRANSA MEDIA CONVERGENCE</span>
+            <h2 class="slide-title">TURNING COMPLIANCE INTO A REVENUE ENGINE</h2>
+            <p class="slide-subtitle">Synchronizing physical roadside DOOH billboards with post-scan mobile verification cards</p>
+          </div>
+          <img class="slide-logo" src="assets/vanbransa-logo.png" alt="VANBRANSA" />
+        </div>
+        <div class="slide-body">
+          <div class="grid-3">
+            <div class="card accent-gold">
+              <span class="card-badge">HIGH-INTENT MOMENT</span>
+              <h3>100% Verified Human Attention</h3>
+              <p>Zero bot traffic. Ads are served exclusively to real consumers holding a physical product in store or at home right after a verified scan.</p>
+            </div>
+            <div class="card accent-amber">
+              <span class="card-badge">OMNICHANNEL SYNC</span>
+              <h3>Roadside DOOH + Mobile</h3>
+              <p>Synchronizes VANBRANSA digital billboards across Nairobi Expressway, Westlands &amp; Mombasa Rd with mobile post-scan reward banners.</p>
+            </div>
+            <div class="card accent-green">
+              <span class="card-badge" style="color:var(--green);background:rgba(16,185,129,0.15);">SELF-FUNDING ROI</span>
+              <h3>3.4% CTR &amp; Instant Rewards</h3>
+              <p>Sponsored loyalty points, airtime micro-rewards, and cross-brand promos subsidize up to 140% of serialization licensing costs.</p>
+            </div>
+          </div>
+          <div class="card" style="background:rgba(249,115,22,0.07);border-color:rgba(249,115,22,0.3);">
+            <p style="font-size:0.86rem;color:var(--text);">
+              <strong>Live Campaign Proof:</strong> Active campaigns in <code>#/campaigns</code> (<em>Distell Sovereign Reserve Protection</em>, <em>Dawa Life Essential Medicine Trust</em>, and <em>Highland Seed Co-op</em>) dynamically rotate in the consumer verifier with live impression, CTR, and reward conversion telemetry.
+            </p>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>AEGIS × VANBRANSA • DOOH MEDIA CONVERGENCE</span>
+          <span>SLIDE 06 / 10</span>
+        </div>
+      </section>
+
+      <!-- SLIDE 7: 14-MODULE PLATFORM AUDIT -->
+      <section class="slide" data-slide="7">
+        <div class="slide-header">
+          <div>
+            <span class="slide-kicker">06 • PRODUCTION READINESS &amp; AUDIT</span>
+            <h2 class="slide-title">14 / 14 MODULES AUDITED &amp; INTERCONNECTED</h2>
+            <p class="slide-subtitle">Zero runtime errors • Full cross-module event propagation • Live on Firebase Hosting</p>
+          </div>
+          <img class="slide-logo" src="assets/vanbransa-logo.png" alt="VANBRANSA" />
+        </div>
+        <div class="slide-body">
+          <table class="pitch-table">
+            <thead>
+              <tr>
+                <th>Module ID</th>
+                <th>Platform Capability</th>
+                <th>Cross-Module Interrelation</th>
+                <th>Audit Verdict</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>AUD-01..03</code></td>
+                <td>Consumer Verifier (QR / NFC / PIN + COA + Whistleblower)</td>
+                <td>Updates Scan Log, Map, KPIs, Cases &amp; DOOH Impressions</td>
+                <td style="color:var(--green);font-weight:700;">PASS (100%)</td>
+              </tr>
+              <tr>
+                <td><code>AUD-04..06</code></td>
+                <td>Command Center, Live Scan Stream &amp; Interactive Threat Map</td>
+                <td>Click-to-Verify &amp; Click-to-Escalate into Case Manager</td>
+                <td style="color:var(--green);font-weight:700;">PASS (100%)</td>
+              </tr>
+              <tr>
+                <td><code>AUD-07..09</code></td>
+                <td>Serialization Studio, Enforcement Cases &amp; AI Reports Hub</td>
+                <td>Minted batches immediately scannable; 1-click Batch Quarantine</td>
+                <td style="color:var(--green);font-weight:700;">PASS (100%)</td>
+              </tr>
+              <tr>
+                <td><code>AUD-10..14</code></td>
+                <td>DOOH Ad Server, USSD/SMS Simulator, Webhooks &amp; RBAC</td>
+                <td>Dynamic campaign rotation, *384*88# gateway &amp; HMAC webhooks</td>
+                <td style="color:var(--green);font-weight:700;">PASS (100%)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="slide-footer">
+          <span>AEGIS × VANBRANSA • 14-POINT TECHNICAL AUDIT</span>
+          <span>SLIDE 07 / 10</span>
+        </div>
+      </section>
+
+      <!-- SLIDE 8: BUSINESS MODEL & UNIT ECONOMICS -->
+      <section class="slide" data-slide="8">
+        <div class="slide-header">
+          <div>
+            <span class="slide-kicker">07 • MONETIZATION &amp; UNIT ECONOMICS</span>
+            <h2 class="slide-title">TRIPLE-ENGINE HYBRID REVENUE MODEL</h2>
+            <p class="slide-subtitle">Combining high-margin SaaS recurring revenue with volume serialization and DOOH media yield</p>
+          </div>
+          <img class="slide-logo" src="assets/vanbransa-logo.png" alt="VANBRANSA" />
+        </div>
+        <div class="slide-body">
+          <div class="grid-3">
+            <div class="card accent-amber">
+              <span class="card-badge">STREAM 1 • PER-UNIT SERIALIZATION</span>
+              <div class="kpi-val" style="color:var(--amber);">$0.004</div>
+              <div class="kpi-label">Per Cryptographic QR / $0.06 NFC</div>
+              <p>Volume-tiered cryptographic code generation for FMCG, spirits, agro-inputs, and pharmaceuticals (78% gross margin).</p>
+            </div>
+            <div class="card accent-blue">
+              <span class="card-badge" style="color:var(--blue);background:rgba(56,189,248,0.15);">STREAM 2 • ENTERPRISE SAAS</span>
+              <div class="kpi-val" style="color:var(--blue);">$2.5K–$15K</div>
+              <div class="kpi-label">Monthly Enterprise License</div>
+              <p>Includes AI Threat Radar, ERP/SAP Webhook Integration, Multi-Role RBAC, and Regulator Compliance Reporting.</p>
+            </div>
+            <div class="card accent-gold">
+              <span class="card-badge">STREAM 3 • DOOH POST-SCAN MEDIA</span>
+              <div class="kpi-val" style="color:var(--gold);">$18 CPM</div>
+              <div class="kpi-label">Verified Post-Scan Sponsorship</div>
+              <p>30% platform revenue share on post-scan brand ad slots and omnichannel VANBRANSA billboard synchronization.</p>
+            </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>AEGIS × VANBRANSA • BUSINESS MODEL</span>
+          <span>SLIDE 08 / 10</span>
+        </div>
+      </section>
+
+      <!-- SLIDE 9: GO-TO-MARKET & TRACTION -->
+      <section class="slide" data-slide="9">
+        <div class="slide-header">
+          <div>
+            <span class="slide-kicker">08 • GO-TO-MARKET ROADMAP</span>
+            <h2 class="slide-title">PAN-AFRICAN EXPANSION &amp; REGULATOR ROLLOUT</h2>
+            <p class="slide-subtitle">Scaling across East Africa's highest-risk verticals alongside national regulatory bodies</p>
+          </div>
+          <img class="slide-logo" src="assets/vanbransa-logo.png" alt="VANBRANSA" />
+        </div>
+        <div class="slide-body">
+          <div class="grid-3">
+            <div class="card accent-green">
+              <span class="card-badge" style="color:var(--green);background:rgba(16,185,129,0.15);">PHASE 1 • Q1–Q2 (ACTIVE)</span>
+              <h3>Beverages, Spirits &amp; Pharma</h3>
+              <ul>
+                <li>30,000+ active serialized units across Nairobi, Mombasa &amp; Kisumu corridors.</li>
+                <li>Direct case escalation workflows for KEBS, KRA, PPB, and Anti-Counterfeit Authority (ACA).</li>
+              </ul>
+            </div>
+            <div class="card accent-amber">
+              <span class="card-badge">PHASE 2 • Q3–Q4</span>
+              <h3>Agro-Inputs &amp; FMCG Scale</h3>
+              <ul>
+                <li>Seed &amp; fertilizer subsidy verification via USSD <code>*384*88#</code> for rural farmers without smartphones.</li>
+                <li>10M+ monthly serialized labels integrated with factory high-speed Domino/Videojet printers.</li>
+              </ul>
+            </div>
+            <div class="card accent-blue">
+              <span class="card-badge" style="color:var(--blue);background:rgba(56,189,248,0.15);">PHASE 3 • YEAR 2</span>
+              <h3>EAC Regional Corridor</h3>
+              <ul>
+                <li>Cross-border transit verification across Kenya, Uganda, Tanzania, and Rwanda.</li>
+                <li>100M+ annual verified scans powering East Africa's largest verified DOOH audience network.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>AEGIS × VANBRANSA • GO-TO-MARKET ROADMAP</span>
+          <span>SLIDE 09 / 10</span>
+        </div>
+      </section>
+
+      <!-- SLIDE 10: CALL TO ACTION -->
+      <section class="slide" data-slide="10">
+        <div class="slide-header">
+          <div>
+            <span class="slide-kicker">09 • NEXT STEPS &amp; LIVE DEPLOYMENT</span>
+            <h2 class="slide-title">EXPERIENCE AEGIS × VANBRANSA LIVE TODAY</h2>
+            <p class="slide-subtitle">Production-deployed, fully audited, and ready for enterprise &amp; regulatory pilot onboarding</p>
+          </div>
+          <img class="slide-logo" src="assets/vanbransa-logo.png" alt="VANBRANSA" />
+        </div>
+        <div class="slide-body">
+          <div class="grid-2">
+            <div class="card accent-amber">
+              <span class="card-badge">LIVE CLOUD INFRASTRUCTURE</span>
+              <h3>Instant Access &amp; Downloads</h3>
+              <ul>
+                <li><strong>Live Production App:</strong> <a href="https://aegis-vanbransa.web.app" style="color:var(--amber-light);">https://aegis-vanbransa.web.app</a></li>
+                <li><strong>PowerPoint Deck (.pptx):</strong> <a href="/aegis-vanbransa-pitch-deck.pptx" download style="color:var(--amber-light);">aegis-vanbransa-pitch-deck.pptx</a></li>
+                <li><strong>14-Point Audit Report:</strong> <a href="/audit-report.html" style="color:var(--amber-light);">/audit-report.html</a> &amp; <a href="/aegis-platform-audit.csv" download style="color:var(--amber-light);">CSV Export</a></li>
+                <li><strong>GitHub Repository:</strong> <code>tokgot-debug/aegis-vanbransa-verify</code></li>
+              </ul>
+            </div>
+            <div class="card accent-green">
+              <span class="card-badge" style="color:var(--green);background:rgba(16,185,129,0.15);">PILOT DEPLOYMENT OFFER</span>
+              <h3>Launch a 30-Day Protected Batch Pilot</h3>
+              <ul>
+                <li>Mint up to 50,000 cryptographic QR/PIN serials for your flagship SKU in under 24 hours.</li>
+                <li>Activate co-branded VANBRANSA post-scan DOOH reward cards with real-time executive telemetry.</li>
+                <li>Full API/Webhook integration with your existing ERP &amp; packaging line.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>AEGIS × VANBRANSA • THANK YOU</span>
+          <span>https://aegis-vanbransa.web.app • SLIDE 10 / 10</span>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Bottom Slide Navigation Controls -->
+    <div class="deck-controls">
+      <button class="btn" onclick="prevSlide()">← Prev Slide</button>
+      <div class="dots" id="slide-dots"></div>
+      <button class="btn" onclick="nextSlide()">Next Slide →</button>
+    </div>
+  </main>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const dotsContainer = document.getElementById('slide-dots');
+    let current = 0;
+
+    function renderDots() {
+      dotsContainer.innerHTML = slides.map((_, idx) =>
+        `<button class="dot ${idx === current ? 'active' : ''}" onclick="goToSlide(${idx})">${idx + 1}</button>`
+      ).join('');
+    }
+
+    function goToSlide(idx) {
+      current = (idx + slides.length) % slides.length;
+      slides.forEach((s, i) => s.classList.toggle('active', i === current));
+      renderDots();
+    }
+
+    function nextSlide() { goToSlide(current + 1); }
+    function prevSlide() { goToSlide(current - 1); }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    });
+
+    renderDots();
+  </script>
+</body>
+</html>
