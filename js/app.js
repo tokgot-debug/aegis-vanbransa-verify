@@ -22,8 +22,14 @@
     USER: "aegis_verify_auth_user_v2",
     ROLE: "aegis_verify_role_mode_v2",
     BATCHES: "aegis_verify_minted_batches_v2",
-    DOOH: "aegis_verify_dooh_billboards_v2"
+    DOOH: "aegis_verify_dooh_billboards_v2",
+    BEVERAGES: "aegis_verify_beverages_v2"
   };
+
+  const persistedBeverages = loadJSON(STORAGE_KEYS.BEVERAGES, null);
+  if (Array.isArray(persistedBeverages) && persistedBeverages.length > 0) {
+    window.SENTINEL_DATA.beverageDatabase = persistedBeverages;
+  }
 
   const state = {
     currentRoute: "/",
@@ -260,6 +266,64 @@
       alertBadge.textContent = String(state.seizureCases.length);
     }
 
+    const mintBadge = document.getElementById("nav-mint-badge");
+    if (mintBadge) {
+      mintBadge.textContent = `${state.mintedBatches.length} LOTS`;
+    }
+
+    const doohBadge = document.getElementById("nav-dooh-badge");
+    if (doohBadge) {
+      const emergencyCount = state.doohBillboards.filter(b => b.activeMode === "EMERGENCY_ALERT").length;
+      doohBadge.textContent = emergencyCount > 0 ? `${emergencyCount} ALERT` : `${state.doohBillboards.length} LED`;
+    }
+
+    const sidebarSpecimens = document.getElementById("sidebar-specimens-list");
+    if (sidebarSpecimens) {
+      sidebarSpecimens.innerHTML = window.SENTINEL_DATA.beverageDatabase.slice(0, 4).map(item => {
+        const isCurrent = state.activeProduct && state.activeProduct.serial === item.serial;
+        const badgeColor =
+          item.status === "AUTHENTIC"
+            ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30"
+            : item.status === "COUNTERFEIT"
+            ? "bg-rose-500/15 text-rose-400 border-rose-500/30"
+            : "bg-amber-500/15 text-amber-400 border-amber-500/30";
+        const shortBadge =
+          item.status === "AUTHENTIC"
+            ? `OK • ${item.riskScore}`
+            : item.status === "COUNTERFEIT"
+            ? `FAKE ${item.riskScore}`
+            : `RISK ${item.riskScore}`;
+        return `
+          <button
+            type="button"
+            data-sidebar-serial="${escapeHtml(item.serial)}"
+            class="w-full text-left px-3 py-2 rounded-lg border transition-all flex items-center justify-between gap-2 group ${
+              isCurrent
+                ? "bg-orange-500/15 border-orange-500/50 text-white"
+                : "bg-[#120f0d] hover:bg-stone-800/80 border-stone-800/90 text-stone-300"
+            }"
+          >
+            <div class="min-w-0">
+              <p class="text-xs font-medium text-stone-200 group-hover:text-white truncate">${escapeHtml(item.name)}</p>
+              <p class="text-[10px] font-mono text-stone-500 truncate">${escapeHtml(item.serial)}</p>
+            </div>
+            <span class="px-1.5 py-0.5 rounded text-[9px] font-mono border shrink-0 ${badgeColor}">${escapeHtml(shortBadge)}</span>
+          </button>
+        `;
+      }).join("");
+
+      sidebarSpecimens.querySelectorAll("[data-sidebar-serial]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const serial = btn.getAttribute("data-sidebar-serial");
+          toggleMobileSidebar(false);
+          executeSerialLookup(serial);
+          if (state.currentRoute !== "/verify") {
+            navigateTo("/verify");
+          }
+        });
+      });
+    }
+
     const userSlot = document.getElementById("user-nav-slot");
     if (userSlot) {
       if (state.user) {
@@ -477,17 +541,17 @@
           </div>
         </section>
 
-        <!-- Three Core Infrastructure Pillars -->
+        <!-- Six Core Interrelated Infrastructure Modules -->
         <section class="space-y-5 pt-4">
           <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
             <div>
-              <span class="text-xs font-mono uppercase tracking-[0.18em] text-orange-500">Infrastructure Modules</span>
-              <h2 class="text-xl sm:text-2xl font-bold text-white mt-1">Cryptographic Verification, Blueprint & Syndicate Intelligence</h2>
+              <span class="text-xs font-mono uppercase tracking-[0.18em] text-orange-500">Closed-Loop Infrastructure Modules</span>
+              <h2 class="text-xl sm:text-2xl font-bold text-white mt-1">Minting, Verification, Blueprint, Trade Radar, DOOH &amp; AI Cortex</h2>
             </div>
-            <p class="text-xs text-stone-400">Select any module or use the left navigation tabs</p>
+            <p class="text-xs text-stone-400">Select any module below or use the persistent left navigation</p>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             <div class="rounded-xl border border-stone-800/90 bg-[#110e0c]/85 hover:border-orange-500/50 p-6 flex flex-col justify-between transition-all group">
               <div class="space-y-3">
                 <div class="w-10 h-10 rounded-lg bg-orange-500/15 border border-orange-500/30 flex items-center justify-center text-orange-400">
@@ -498,7 +562,7 @@
                   <span class="text-xs font-mono text-orange-400">/verify</span>
                 </div>
                 <p class="text-xs text-stone-400 leading-relaxed">
-                  Phone-checkable cryptographic unit identity, 365nm UV taggant inspection, closure retirement state (<code class="text-orange-400 font-mono">already_opened</code>), and custody timeline.
+                  Phone-checkable cryptographic unit identity, 365nm UV taggant inspection, POS closure retirement (<code class="text-orange-400 font-mono">already_opened</code>), and custody timeline.
                 </p>
               </div>
               <a href="#/verify" class="mt-6 inline-flex items-center gap-2 text-xs font-semibold text-orange-400 group-hover:translate-x-1 transition-transform">
@@ -517,7 +581,7 @@
                   <span class="text-xs font-mono text-orange-400">/blueprint</span>
                 </div>
                 <p class="text-xs text-stone-400 leading-relaxed">
-                  Explore how Aegis binds ECDSA P-256 unit identities to KRA excise stamps and scores every scan, shipment, and field test.
+                  Explore how Aegis binds ECDSA P-256 unit identities to KRA excise stamps and scores every scan, shipment, and field test in &lt;150ms.
                 </p>
               </div>
               <a href="#/blueprint" class="mt-6 inline-flex items-center gap-2 text-xs font-semibold text-orange-400 group-hover:translate-x-1 transition-transform">
@@ -541,6 +605,63 @@
               </div>
               <a href="#/trade" class="mt-6 inline-flex items-center gap-2 text-xs font-semibold text-orange-400 group-hover:translate-x-1 transition-transform">
                 <span>Open Trade Monitor</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+              </a>
+            </div>
+
+            <div class="rounded-xl border border-stone-800/90 bg-[#110e0c]/85 hover:border-emerald-500/50 p-6 flex flex-col justify-between transition-all group">
+              <div class="space-y-3">
+                <div class="w-10 h-10 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                  <i data-lucide="qr-code" class="w-5 h-5"></i>
+                </div>
+                <div class="flex items-center justify-between">
+                  <h3 class="text-base font-bold text-white">4. Mint &amp; Stamp Bind</h3>
+                  <span class="text-xs font-mono text-emerald-400">/mint</span>
+                </div>
+                <p class="text-xs text-stone-400 leading-relaxed">
+                  Provision new beverage batches on the bottling line HSM, bind KRA excise stamp reels, and print scannable QR neck labels.
+                </p>
+              </div>
+              <a href="#/mint" class="mt-6 inline-flex items-center gap-2 text-xs font-semibold text-emerald-400 group-hover:translate-x-1 transition-transform">
+                <span>Provision Batch Lot</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+              </a>
+            </div>
+
+            <div class="rounded-xl border border-stone-800/90 bg-[#110e0c]/85 hover:border-orange-500/50 p-6 flex flex-col justify-between transition-all group">
+              <div class="space-y-3">
+                <div class="w-10 h-10 rounded-lg bg-orange-500/15 border border-orange-500/30 flex items-center justify-center text-orange-400">
+                  <i data-lucide="monitor-play" class="w-5 h-5"></i>
+                </div>
+                <div class="flex items-center justify-between">
+                  <h3 class="text-base font-bold text-white">5. VANBRANSA DOOH</h3>
+                  <span class="text-xs font-mono text-orange-400">/dooh</span>
+                </div>
+                <p class="text-xs text-stone-400 leading-relaxed">
+                  Smart roadside LED billboards dynamically linked to county counterfeit risk feeds with instant consumer QR verification handoff.
+                </p>
+              </div>
+              <a href="#/dooh" class="mt-6 inline-flex items-center gap-2 text-xs font-semibold text-orange-400 group-hover:translate-x-1 transition-transform">
+                <span>Manage Smart Billboards</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+              </a>
+            </div>
+
+            <div class="rounded-xl border border-stone-800/90 bg-[#110e0c]/85 hover:border-orange-500/50 p-6 flex flex-col justify-between transition-all group">
+              <div class="space-y-3">
+                <div class="w-10 h-10 rounded-lg bg-orange-500/15 border border-orange-500/30 flex items-center justify-center text-orange-400">
+                  <i data-lucide="brain-circuit" class="w-5 h-5"></i>
+                </div>
+                <div class="flex items-center justify-between">
+                  <h3 class="text-base font-bold text-white">6. AI Reports &amp; Analytics</h3>
+                  <span class="text-xs font-mono text-orange-400">/reports</span>
+                </div>
+                <p class="text-xs text-stone-400 leading-relaxed">
+                  Aegis Cortex neural copilot, excise tax recovery trajectories, county risk matrices, and interactive What-If policy simulation.
+                </p>
+              </div>
+              <a href="#/reports" class="mt-6 inline-flex items-center gap-2 text-xs font-semibold text-orange-400 group-hover:translate-x-1 transition-transform">
+                <span>Launch Aegis Cortex AI</span>
                 <i data-lucide="arrow-right" class="w-4 h-4"></i>
               </a>
             </div>
@@ -892,7 +1013,23 @@
                     class="px-3.5 py-2 rounded-lg bg-[#14110f] hover:bg-stone-800 text-stone-200 border border-stone-700 text-xs font-mono font-semibold flex items-center gap-1.5 transition-all"
                   >
                     <i data-lucide="award" class="w-3.5 h-3.5 text-orange-400"></i>
-                    <span>Download Forensic Certificate</span>
+                    <span>Download Certificate</span>
+                  </button>
+                  <button
+                    type="button"
+                    id="push-unit-to-dooh-btn"
+                    class="px-3.5 py-2 rounded-lg bg-[#14110f] hover:bg-stone-800 text-orange-300 border border-orange-500/35 text-xs font-mono font-semibold flex items-center gap-1.5 transition-all"
+                  >
+                    <i data-lucide="monitor-play" class="w-3.5 h-3.5"></i>
+                    <span>Broadcast to DOOH</span>
+                  </button>
+                  <button
+                    type="button"
+                    id="analyze-unit-ai-btn"
+                    class="px-3.5 py-2 rounded-lg bg-[#14110f] hover:bg-stone-800 text-emerald-300 border border-emerald-500/35 text-xs font-mono font-semibold flex items-center gap-1.5 transition-all"
+                  >
+                    <i data-lucide="brain-circuit" class="w-3.5 h-3.5"></i>
+                    <span>Analyze in AI Cortex</span>
                   </button>
                 </div>
                 <button
@@ -964,7 +1101,8 @@
         opticalCheck: "PASS • 365nm Dual-Peak Taggant & Intaglio Verified",
         velocityCheck: "PASS • Single Retail Scan in Designated Zone KE-01",
         finalVerdict: "ALLOW SALE • RISK 3 (GENUINE)",
-        color: "emerald"
+        color: "emerald",
+        specimenSerial: "AEG-2026-8841-KEN"
       },
       cloned: {
         title: "Photocopied / Cloned Excise Stamp Ring",
@@ -972,7 +1110,8 @@
         opticalCheck: "FAIL • Halftone CMYK Toner Dots & Zero UV Fluorescence",
         velocityCheck: "FAIL • Scanned 87x Across 5 Sub-Counties in 4 Hours",
         finalVerdict: "BLOCK & DISPATCH RAID • RISK 98",
-        color: "rose"
+        color: "rose",
+        specimenSerial: "AEG-FAKE-0013-CLN"
       },
       refilled: {
         title: "Post-Retirement Refill (`SNT-FA24-57D2-13EE-EC26`)",
@@ -980,7 +1119,8 @@
         opticalCheck: "WARN • Closure Tamper Loop Previously Opened",
         velocityCheck: "FAIL • `already_opened` + `post_retirement_scan` in Nakuru",
         finalVerdict: "QUARANTINE • RISK 74 (ALREADY OPENED)",
-        color: "amber"
+        color: "amber",
+        specimenSerial: "SNT-FA24-57D2-13EE-EC26"
       }
     };
     const sim = scenarios[state.blueprintTestScenario] || scenarios.authentic;
@@ -995,10 +1135,16 @@
             </div>
             <h1 class="text-2xl sm:text-3xl font-extrabold text-white mt-1">How Aegis Binds Identity to Every Bottle</h1>
           </div>
-          <a href="#/verify" class="px-4 py-2.5 rounded bg-[#f97316] hover:bg-[#fb923c] text-black font-bold text-xs flex items-center gap-2 self-start">
-            <i data-lucide="scan-line" class="w-4 h-4"></i>
-            <span>Check a bottle now</span>
-          </a>
+          <div class="flex flex-wrap items-center gap-2 self-start">
+            <a href="#/mint" class="px-3.5 py-2.5 rounded bg-[#14110f] hover:bg-stone-800 border border-stone-700 text-emerald-400 font-mono font-semibold text-xs flex items-center gap-2">
+              <i data-lucide="qr-code" class="w-4 h-4"></i>
+              <span>Mint Batch &amp; Bind Stamp</span>
+            </a>
+            <a href="#/verify" class="px-4 py-2.5 rounded bg-[#f97316] hover:bg-[#fb923c] text-black font-bold text-xs flex items-center gap-2">
+              <i data-lucide="scan-line" class="w-4 h-4"></i>
+              <span>Check a bottle now</span>
+            </a>
+          </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-7">
@@ -1109,9 +1255,20 @@
               <span class="text-[10px] font-mono text-stone-400">L3 • NETWORK & VELOCITY</span>
               <p class="font-semibold text-white">${escapeHtml(sim.velocityCheck)}</p>
             </div>
-            <div class="p-4 rounded-lg bg-[#080706] border border-orange-500/40 space-y-1">
-              <span class="text-[10px] font-mono text-orange-400">AEGIS ENGINE VERDICT</span>
-              <p class="font-bold text-orange-300">${escapeHtml(sim.finalVerdict)}</p>
+            <div class="p-4 rounded-lg bg-[#080706] border border-orange-500/40 space-y-2 flex flex-col justify-between">
+              <div>
+                <span class="text-[10px] font-mono text-orange-400">AEGIS ENGINE VERDICT</span>
+                <p class="font-bold text-orange-300 mt-0.5">${escapeHtml(sim.finalVerdict)}</p>
+              </div>
+              <button
+                type="button"
+                id="load-sim-to-verify-btn"
+                data-sim-serial="${escapeHtml(sim.specimenSerial)}"
+                class="w-full py-1.5 px-2.5 rounded bg-orange-500/20 hover:bg-orange-500/30 border border-orange-500/40 text-orange-300 font-mono text-[11px] font-semibold flex items-center justify-center gap-1.5 transition-all"
+              >
+                <i data-lucide="scan-line" class="w-3.5 h-3.5"></i>
+                <span>Inspect Specimen in Live Scanner →</span>
+              </button>
             </div>
           </div>
         </section>
@@ -1255,14 +1412,25 @@
               </div>
             </div>
 
-            <button
-              type="button"
-              id="dispatch-taskforce-btn"
-              class="w-full py-3 rounded-lg bg-orange-500/20 hover:bg-orange-500/30 border border-orange-500/40 text-orange-300 text-xs font-bold font-mono flex items-center justify-center gap-2 transition-all"
-            >
-              <i data-lucide="radio" class="w-4 h-4"></i>
-              <span>Dispatch Aegis Field Alert to ${escapeHtml(activeHotspot.county)}</span>
-            </button>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <button
+                type="button"
+                id="dispatch-taskforce-btn"
+                class="w-full py-3 px-3 rounded-lg bg-orange-500/20 hover:bg-orange-500/30 border border-orange-500/40 text-orange-300 text-xs font-bold font-mono flex items-center justify-center gap-2 transition-all"
+              >
+                <i data-lucide="radio" class="w-4 h-4"></i>
+                <span>Dispatch Field Unit</span>
+              </button>
+              <button
+                type="button"
+                id="sync-hotspot-dooh-btn"
+                data-hotspot-county="${escapeHtml(activeHotspot.county)}"
+                class="w-full py-3 px-3 rounded-lg bg-[#14110f] hover:bg-stone-800 border border-stone-700 text-stone-200 text-xs font-bold font-mono flex items-center justify-center gap-2 transition-all"
+              >
+                <i data-lucide="monitor-play" class="w-4 h-4 text-orange-400"></i>
+                <span>Sync ${escapeHtml(activeHotspot.county.split(" ")[0])} DOOH →</span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -1306,6 +1474,7 @@
                   <th class="py-2.5 px-3">SEVERITY</th>
                   <th class="py-2.5 px-3">STATUS</th>
                   <th class="py-2.5 px-3 text-right">REVENUE PROTECTED</th>
+                  <th class="py-2.5 px-3 text-right">ACTION</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-stone-800/60">
@@ -1327,6 +1496,15 @@
                     </td>
                     <td class="py-3 px-3 font-mono text-orange-400">${escapeHtml(c.status)}</td>
                     <td class="py-3 px-3 font-mono text-right text-white font-semibold">${escapeHtml(c.estimatedTaxProtected)}</td>
+                    <td class="py-3 px-3 text-right">
+                      <button
+                        type="button"
+                        data-case-ai-brief="${escapeHtml(c.caseId)}: ${escapeHtml(c.product)} in ${escapeHtml(c.location)} (${escapeHtml(c.violation)})"
+                        class="px-2.5 py-1 rounded bg-stone-800 hover:bg-stone-700 text-orange-300 font-mono text-[11px]"
+                      >
+                        AI Brief →
+                      </button>
+                    </td>
                   </tr>
                 `).join("")}
               </tbody>
@@ -1478,7 +1656,7 @@
               id="export-csv-report-btn"
               class="px-3.5 py-2 rounded-lg bg-[#14110f] hover:bg-stone-800 text-stone-200 border border-stone-700 font-mono text-xs flex items-center gap-2 transition-all"
             >
-              <i data-lucide="file-Spreadsheet" class="w-4 h-4 text-orange-400"></i>
+              <i data-lucide="file-spreadsheet" class="w-4 h-4 text-orange-400"></i>
               <span>Export CSV Telemetry</span>
             </button>
             <button
@@ -2342,6 +2520,25 @@
               </div>
             </form>
           `
+              : mode === "reset"
+              ? `
+            <form id="auth-reset-form" class="space-y-4">
+              <div>
+                <label class="block text-xs font-medium text-stone-300 mb-1">New Console Password</label>
+                <input type="password" id="reset-new-password" required minlength="8" placeholder="Min. 8 characters" class="w-full px-3.5 py-2.5 rounded-lg bg-[#080706] border border-stone-800 text-sm text-white focus:border-orange-500 focus:outline-none" />
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-stone-300 mb-1">Confirm New Password</label>
+                <input type="password" id="reset-confirm-password" required minlength="8" placeholder="Repeat password" class="w-full px-3.5 py-2.5 rounded-lg bg-[#080706] border border-stone-800 text-sm text-white focus:border-orange-500 focus:outline-none" />
+              </div>
+              <button type="submit" class="w-full py-3 rounded-lg bg-[#f97316] hover:bg-[#fb923c] text-black font-bold text-sm transition-all">
+                Update Console Key ↗
+              </button>
+              <div class="text-center text-xs">
+                <a href="#/login" class="text-stone-400 hover:text-white">← Back to Sign In</a>
+              </div>
+            </form>
+          `
               : `
             <form id="auth-forgot-form" class="space-y-4">
               <div>
@@ -2577,6 +2774,8 @@
       hash: "RETIRED-POS-" + Math.floor(1000 + Math.random() * 9000)
     });
 
+    saveJSON(STORAGE_KEYS.BEVERAGES, window.SENTINEL_DATA.beverageDatabase);
+
     showToast(
       "Unit Marked Opened / Retired",
       `${p.serial} is now retired. Any future scan triggers ALREADY OPENED (RISK 74).`,
@@ -2643,6 +2842,7 @@
         e.preventDefault();
         const input = document.getElementById("hero-serial-input");
         executeSerialLookup(input?.value || state.activeProduct.serial);
+        navigateTo("/verify");
       });
     }
 
@@ -2650,6 +2850,9 @@
       btn.addEventListener("click", () => {
         const serial = btn.getAttribute("data-quick-serial");
         executeSerialLookup(serial);
+        if (btn.textContent.trim() === "Inspect") {
+          navigateTo("/verify");
+        }
       });
     });
 
@@ -2685,6 +2888,54 @@
     const downloadCertBtn = document.getElementById("download-cert-btn");
     if (downloadCertBtn) {
       downloadCertBtn.addEventListener("click", downloadForensicCertificate);
+    }
+
+    const pushToDoohBtn = document.getElementById("push-unit-to-dooh-btn");
+    if (pushToDoohBtn) {
+      pushToDoohBtn.addEventListener("click", () => {
+        const p = state.activeProduct;
+        const loc = (p.lastScannedLocation || "Nairobi").toLowerCase();
+        const matchingBoard =
+          state.doohBillboards.find(b => loc.includes(b.county.split(" ")[0].toLowerCase())) ||
+          state.doohBillboards[0];
+        if (matchingBoard) {
+          state.selectedBillboardId = matchingBoard.screenId;
+          matchingBoard.targetSerial = p.serial;
+          matchingBoard.lastSynced = "Just now";
+          if (p.status === "COUNTERFEIT") {
+            matchingBoard.activeMode = "EMERGENCY_ALERT";
+            matchingBoard.headline = `COUNTERFEIT ALERT: ${p.name.toUpperCase()}`;
+            matchingBoard.subheadline = `Unit ${p.serial} flagged as CLONED STAMP (RISK ${p.riskScore}). Scan bottle QR before purchase.`;
+          } else if (p.status === "SUSPICIOUS") {
+            matchingBoard.activeMode = "REFILL_WARNING";
+            matchingBoard.headline = `REFILL WARNING: ${p.name.toUpperCase()}`;
+            matchingBoard.subheadline = `Unit ${p.serial} flagged ALREADY OPENED (RISK ${p.riskScore}). Inspect closure bridge & scan QR.`;
+          } else {
+            matchingBoard.activeMode = "BRAND_TRUST";
+            matchingBoard.headline = `VERIFIED GENUINE: ${p.name.toUpperCase()}`;
+            matchingBoard.subheadline = `Cryptographic identity ${p.serial} bound to KRA stamp ${p.stampCode} (RISK ${p.riskScore}).`;
+          }
+          saveJSON(STORAGE_KEYS.DOOH, state.doohBillboards);
+          showToast(
+            "Synced to VANBRANSA DOOH",
+            `Pushed ${p.serial} telemetry to ${matchingBoard.screenId} (${matchingBoard.county}).`,
+            "orange"
+          );
+          navigateTo("/dooh");
+        }
+      });
+    }
+
+    const analyzeUnitAiBtn = document.getElementById("analyze-unit-ai-btn");
+    if (analyzeUnitAiBtn) {
+      analyzeUnitAiBtn.addEventListener("click", () => {
+        const p = state.activeProduct;
+        const prompt = `Forensic diagnostic for ${p.name} (${p.serial}) — Verdict: ${p.verdictBadge}, Risk ${p.riskScore}`;
+        state.aiCustomPrompt = prompt;
+        state.aiReportOutput = buildAiReportPayload("custom", prompt);
+        showToast("Aegis Cortex Synthesized", `Generated AI forensic dossier for ${p.serial}.`, "emerald");
+        navigateTo("/reports");
+      });
     }
 
     const uvBtn = document.getElementById("toggle-uv-btn");
@@ -2724,10 +2975,44 @@
       });
     });
 
+    const loadSimBtn = document.getElementById("load-sim-to-verify-btn");
+    if (loadSimBtn) {
+      loadSimBtn.addEventListener("click", () => {
+        const serial = loadSimBtn.getAttribute("data-sim-serial") || "SNT-FA24-57D2-13EE-EC26";
+        executeSerialLookup(serial);
+        navigateTo("/verify");
+      });
+    }
+
     document.querySelectorAll("[data-hotspot-id]").forEach(btn => {
       btn.addEventListener("click", () => {
         state.selectedHotspotId = btn.getAttribute("data-hotspot-id");
         renderApp();
+      });
+    });
+
+    const syncHotspotDoohBtn = document.getElementById("sync-hotspot-dooh-btn");
+    if (syncHotspotDoohBtn) {
+      syncHotspotDoohBtn.addEventListener("click", () => {
+        const county = syncHotspotDoohBtn.getAttribute("data-hotspot-county") || "Nairobi";
+        const board =
+          state.doohBillboards.find(b => b.county.toLowerCase().includes(county.split(" ")[0].toLowerCase())) ||
+          state.doohBillboards[0];
+        if (board) {
+          state.selectedBillboardId = board.screenId;
+          showToast("DOOH Screen Selected", `Opened ${board.screenId} (${board.name}) for ${county}.`, "orange");
+          navigateTo("/dooh");
+        }
+      });
+    }
+
+    document.querySelectorAll("[data-case-ai-brief]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const caseContext = btn.getAttribute("data-case-ai-brief") || "";
+        state.aiCustomPrompt = `Analyze seizure case ${caseContext}`;
+        state.aiReportOutput = buildAiReportPayload("custom", state.aiCustomPrompt);
+        showToast("Case Loaded in AI Cortex", `Synthesized enforcement briefing for ${caseContext.split(":")[0]}.`, "emerald");
+        navigateTo("/reports");
       });
     });
 
@@ -2791,6 +3076,7 @@
         };
 
         window.SENTINEL_DATA.beverageDatabase.unshift(newProduct);
+        saveJSON(STORAGE_KEYS.BEVERAGES, window.SENTINEL_DATA.beverageDatabase);
         state.lastMintedUnit = newProduct;
         state.activeProduct = newProduct;
 
@@ -3099,6 +3385,15 @@
         navigateTo("/login");
       });
     }
+
+    const resetForm = document.getElementById("auth-reset-form");
+    if (resetForm) {
+      resetForm.addEventListener("submit", e => {
+        e.preventDefault();
+        showToast("Console Key Updated", "Your new cryptographic console password is active.", "emerald");
+        navigateTo("/login");
+      });
+    }
   }
 
   function openReportModal(prefillProduct) {
@@ -3129,6 +3424,44 @@
     }
   }
 
+  function renderRoleContextBanner() {
+    const roleMeta = {
+      consumer: {
+        badge: "CONSUMER PROTECTION MODE",
+        desc: "Instant phone verification, closure tamper-bridge check, and counterfeit reporting.",
+        ctaLabel: "Scan a Bottle Now →",
+        ctaRoute: "#/verify"
+      },
+      retailer: {
+        badge: "RETAILER & HOSPITALITY POS MODE",
+        desc: "Batch intake verification, POS cryptographic bottle retirement, and bottling lot provisioning.",
+        ctaLabel: "Provision / Mint Batch →",
+        ctaRoute: "#/mint"
+      },
+      inspector: {
+        badge: "KRA / KEBS FIELD INSPECTOR MODE",
+        desc: "365nm UV taggant spectrometry, syndicate corridor radar, VANBRANSA DOOH alerts, and AI dossiers.",
+        ctaLabel: "Open Syndicate Radar →",
+        ctaRoute: "#/trade"
+      }
+    };
+    const current = roleMeta[state.roleMode] || roleMeta.consumer;
+    return `
+      <div class="mb-6 px-4 py-2.5 rounded-xl bg-[#120f0d]/90 border border-stone-800/90 flex flex-wrap items-center justify-between gap-3 text-xs">
+        <div class="flex flex-wrap items-center gap-2.5">
+          <span class="px-2 py-0.5 rounded bg-orange-500/15 border border-orange-500/35 text-orange-400 font-mono text-[10px] font-bold uppercase tracking-wider">
+            ${escapeHtml(current.badge)}
+          </span>
+          <span class="text-stone-300">${escapeHtml(current.desc)}</span>
+        </div>
+        <div class="flex items-center gap-3 font-mono text-[11px]">
+          <span class="text-stone-500 hidden sm:inline">Active Specimen: <strong class="text-stone-200">${escapeHtml(state.activeProduct.serial)}</strong></span>
+          <a href="${current.ctaRoute}" class="text-orange-400 hover:underline font-semibold">${escapeHtml(current.ctaLabel)}</a>
+        </div>
+      </div>
+    `;
+  }
+
   function renderApp() {
     const route = getNormalizedRoute();
     if (route !== "/verify" && state.cameraActive) {
@@ -3140,31 +3473,37 @@
     const root = document.getElementById("app-root");
     if (!root) return;
 
+    const isAuthRoute = route === "/login" || route === "/register" || route === "/forgot-password" || route === "/reset-password";
+    const bannerHtml = isAuthRoute ? "" : renderRoleContextBanner();
+
+    let viewHtml = "";
     if (route === "/" || route === "/home") {
-      root.innerHTML = renderHomeView();
+      viewHtml = renderHomeView();
     } else if (route === "/verify") {
-      root.innerHTML = renderVerifyView();
+      viewHtml = renderVerifyView();
     } else if (route === "/blueprint") {
-      root.innerHTML = renderBlueprintView();
+      viewHtml = renderBlueprintView();
     } else if (route === "/trade") {
-      root.innerHTML = renderTradeView();
+      viewHtml = renderTradeView();
     } else if (route === "/mint") {
-      root.innerHTML = renderMintView();
+      viewHtml = renderMintView();
     } else if (route === "/dooh") {
-      root.innerHTML = renderDoohView();
+      viewHtml = renderDoohView();
     } else if (route === "/reports") {
-      root.innerHTML = renderReportsView();
+      viewHtml = renderReportsView();
     } else if (route === "/login") {
-      root.innerHTML = renderAuthView("login");
+      viewHtml = renderAuthView("login");
     } else if (route === "/register") {
-      root.innerHTML = renderAuthView("register");
+      viewHtml = renderAuthView("register");
     } else if (route === "/forgot-password") {
-      root.innerHTML = renderAuthView("forgot");
+      viewHtml = renderAuthView("forgot");
     } else if (route === "/reset-password") {
-      root.innerHTML = renderAuthView("reset");
+      viewHtml = renderAuthView("reset");
     } else {
-      root.innerHTML = renderHomeView();
+      viewHtml = renderHomeView();
     }
+
+    root.innerHTML = bannerHtml + viewHtml;
 
     if (window.lucide) {
       window.lucide.createIcons();
@@ -3200,14 +3539,6 @@
     if (openSidebarBtn) openSidebarBtn.addEventListener("click", () => toggleMobileSidebar(true));
     if (closeSidebarBtn) closeSidebarBtn.addEventListener("click", () => toggleMobileSidebar(false));
     if (sidebarBackdrop) sidebarBackdrop.addEventListener("click", () => toggleMobileSidebar(false));
-
-    document.querySelectorAll("[data-sidebar-serial]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const serial = btn.getAttribute("data-sidebar-serial");
-        toggleMobileSidebar(false);
-        executeSerialLookup(serial);
-      });
-    });
 
     document.querySelectorAll(".role-btn").forEach(btn => {
       btn.addEventListener("click", () => {
@@ -3256,9 +3587,28 @@
 
         state.seizureCases = [newCase, ...state.seizureCases];
         saveJSON(STORAGE_KEYS.CASES, state.seizureCases);
+
+        if (state.doohAutoSync) {
+          const matchingBoard = state.doohBillboards.find(b =>
+            location.toLowerCase().includes(b.county.split(" ")[0].toLowerCase())
+          );
+          if (matchingBoard) {
+            matchingBoard.activeMode = "EMERGENCY_ALERT";
+            matchingBoard.headline = `EMERGENCY COUNTERFEIT ALERT: ${brand.toUpperCase()}`;
+            matchingBoard.subheadline = `Field report (${newCase.caseId}) logged in ${location}. Verify serial ${serial} via QR before purchase.`;
+            matchingBoard.targetSerial = serial;
+            matchingBoard.lastSynced = "Just now";
+            saveJSON(STORAGE_KEYS.DOOH, state.doohBillboards);
+          }
+        }
+
         closeReportModal();
         reportForm.reset();
-        showToast("Aegis Warrant Logged", `Case ${newCase.caseId} added to Trade Intelligence.`, "rose");
+        showToast(
+          "Aegis Warrant Logged & DOOH Synced",
+          `Case ${newCase.caseId} added to Trade Intelligence${state.doohAutoSync ? " and broadcasted to county DOOH screens" : ""}.`,
+          "rose"
+        );
         navigateTo("/trade");
       });
     }
