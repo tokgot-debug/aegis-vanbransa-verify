@@ -1,0 +1,16 @@
+{
+  "name": "Aegis by VANBRANSA — Anti-Counterfeit Infrastructure",
+  "short_name": "Aegis • VANBRANSA",
+  "description": "Aegis by VANBRANSA gives each unit a phone-checkable cryptographic identity, binds it to the excise stamp, and scores every scan, shipment and field test to find fakes and the networks behind them.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#090807",
+  "theme_color": "#f97316",
+  "icons": [
+    {
+      "src": "assets/vanbransa-logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

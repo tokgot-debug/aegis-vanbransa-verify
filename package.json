@@ -1,0 +1,11 @@
+{
+  "name": "sentinel-verify",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sentinel Verify — AI-powered beverage authentication and illicit trade monitoring platform",
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs",
+    "dev": "node server.mjs"
+  }
+}
