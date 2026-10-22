@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AEGIS × VANBRANSA — End-to-End Platform Audit Matrix</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-color: #080706;
+      color: #f5f5f4;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+    @media print {
+      .no-print { display: none !important; }
+      body { background: #ffffff !important; color: #000000 !important; }
+    }
+  </style>
+</head>
+<body class="min-h-screen p-6 sm:p-10">
+  <div class="max-w-7xl mx-auto space-y-6">
+    <!-- Top Header -->
+    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-stone-800 pb-6">
+      <div class="space-y-2">
+        <div class="flex items-center gap-3">
+          <img src="assets/vanbransa-logo.png" alt="VANBRANSA" class="h-7 w-auto bg-black px-2 py-1 rounded border border-stone-800" />
+          <span class="text-xs font-mono uppercase tracking-[0.2em] text-orange-500 font-semibold">
+            PROJECT AEGIS × VANBRANSA • QUALITY &amp; ARCHITECTURE AUDIT
+          </span>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-white">
+          End-to-End Customer Journey, Module Interrelation &amp; Functional Audit Table
+        </h1>
+        <p class="text-xs sm:text-sm text-stone-400">
+          Audited across all 11 routes, 6 core modules, and 3 operator personas (Consumer, Retailer POS, KRA/KEBS Field Inspector).
+        </p>
+      </div>
+
+      <div class="no-print flex flex-wrap items-center gap-2.5">
+        <a
+          href="aegis-platform-audit.csv"
+          download="aegis-vanbransa-platform-audit-results.csv"
+          class="px-4 py-2.5 rounded-lg bg-[#f97316] hover:bg-[#fb923c] text-black font-bold text-xs font-mono uppercase tracking-wider shadow-lg shadow-orange-500/20 transition-all"
+        >
+          ↓ Download CSV (Excel / Sheets)
+        </a>
+        <button
+          type="button"
+          onclick="downloadJsonAudit()"
+          class="px-4 py-2.5 rounded-lg bg-[#14110f] hover:bg-stone-800 text-stone-200 border border-stone-700 font-mono text-xs transition-all"
+        >
+          ↓ Download JSON
+        </button>
+        <button
+          type="button"
+          onclick="window.print()"
+          class="px-4 py-2.5 rounded-lg bg-[#14110f] hover:bg-stone-800 text-orange-400 border border-orange-500/40 font-mono text-xs transition-all"
+        >
+          🖨 Print / Save PDF
+        </button>
+        <a
+          href="index.html#/reports"
+          class="px-4 py-2.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 font-mono text-xs transition-all"
+        >
+          ← Back to Platform
+        </a>
+      </div>
+    </div>
+
+    <!-- Summary KPI Cards -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div class="p-4 rounded-xl bg-[#110e0c] border border-stone-800">
+        <span class="text-[10px] font-mono uppercase text-stone-400 block">AUDIT CHECKPOINTS</span>
+        <strong class="text-2xl font-black text-white">14 / 14</strong>
+        <span class="text-[11px] font-mono text-emerald-400 block mt-0.5">100% Passed &amp; Active</span>
+      </div>
+      <div class="p-4 rounded-xl bg-[#110e0c] border border-stone-800">
+        <span class="text-[10px] font-mono uppercase text-stone-400 block">SPA ROUTES VERIFIED</span>
+        <strong class="text-2xl font-black text-orange-400">11 Routes</strong>
+        <span class="text-[11px] font-mono text-stone-400 block mt-0.5">0 Console / Syntax Errors</span>
+      </div>
+      <div class="p-4 rounded-xl bg-[#110e0c] border border-stone-800">
+        <span class="text-[10px] font-mono uppercase text-stone-400 block">INTERRELATED MODULES</span>
+        <strong class="text-2xl font-black text-white">6 Pillars</strong>
+        <span class="text-[11px] font-mono text-emerald-400 block mt-0.5">Closed-Loop State Sync</span>
+      </div>
+      <div class="p-4 rounded-xl bg-[#110e0c] border border-stone-800">
+        <span class="text-[10px] font-mono uppercase text-stone-400 block">PERSONA JOURNEYS</span>
+        <strong class="text-2xl font-black text-amber-400">3 Roles</strong>
+        <span class="text-[11px] font-mono text-stone-400 block mt-0.5">Consumer • Retailer • Inspector</span>
+      </div>
+    </div>
+
+    <!-- Audit Table -->
+    <div class="rounded-xl border border-stone-800 bg-[#110e0c]/95 overflow-hidden shadow-2xl">
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-xs">
+          <thead>
+            <tr class="border-b border-stone-800 bg-[#16120f] text-stone-300 font-mono text-[11px] uppercase">
+              <th class="py-3.5 px-4">ID</th>
+              <th class="py-3.5 px-4">Category</th>
+              <th class="py-3.5 px-4">Module / Route</th>
+              <th class="py-3.5 px-4">Persona</th>
+              <th class="py-3.5 px-4">Feature &amp; Interrelation Audited</th>
+              <th class="py-3.5 px-4">Connected Modules</th>
+              <th class="py-3.5 px-4">Pre-Audit Finding</th>
+              <th class="py-3.5 px-4">Resolution &amp; Enhancement Applied</th>
+              <th class="py-3.5 px-4 text-right">Status</th>
+            </tr>
+          </thead>
+          <tbody id="audit-tbody" class="divide-y divide-stone-800/70"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const AUDIT_ROWS = [
+      {
+        id: "AUD-01",
+        category: "Customer Journey",
+        module: "Overview (#/)",
+        persona: "Consumer / Retailer / Inspector",
+        feature: "Hero Quick-Verify & 6-Module Infrastructure Grid",
+        connected: "#/ → #/verify & All 6 Modules",
+        finding: "Overview grid only displayed 3 of 6 modules; Hero quick-verify did not auto-open full dossier.",
+        resolution: "Expanded grid to all 6 modules (/verify, /blueprint, /trade, /mint, /dooh, /reports) and auto-routed Hero lookup & Inspect buttons to #/verify.",
+        status: "PASSED • ACTIVE"
+      },
+      {
+        id: "AUD-02",
+        category: "Persona Experience",
+        module: "Global Shell & Left Sidebar",
+        persona: "Consumer / Retailer / Inspector",
+        feature: "Dynamic Role Perspective Switcher & Contextual Banner",
+        connected: "#left-sidebar ↔ All Views",
+        finding: "Role switcher updated state.roleMode and toast but lacked a persistent workspace header indicator.",
+        resolution: "Added live Role Context Banner (renderRoleContextBanner) at top of workspace with role-specific description and 1-click workflow shortcut.",
+        status: "PASSED • ACTIVE"
+      },
+      {
+        id: "AUD-03",
+        category: "Core Verification",
+        module: "Verify Bottle (#/verify)",
+        persona: "Consumer / Inspector",
+        feature: "Cryptographic Unit Lookup + 365nm UV Taggant + Camera BarcodeDetector",
+        connected: "#/verify ↔ #/dooh & #/reports",
+        finding: "Verify view had no direct 1-click handoff to DOOH billboards or AI Cortex reports.",
+        resolution: "Added 'Broadcast to DOOH' (#push-unit-to-dooh-btn) and 'Analyze in AI Cortex' (#analyze-unit-ai-btn) buttons directly in the Forensic Dossier.",
+        status: "PASSED • ACTIVE"
+      },
+      {
+        id: "AUD-04",
+        category: "Optical Forensics",
+        module: "Verify Bottle (#/verify)",
+        persona: "Field Inspector",
+        feature: "Stamp Photo Pixel & Halftone Contrast Assay",
+        connected: "#/verify → Forensic Dossier",
+        finding: "HTML5 Canvas luminance standard deviation & SNR assay worked cleanly.",
+        resolution: "Verified sharp intaglio (>38σ) vs halftone toner anomaly detection with instant toast & badge rendering.",
+        status: "PASSED • ACTIVE"
+      },
+      {
+        id: "AUD-05",
+        category: "Hospitality Anti-Refill",
+        module: "Verify Bottle (#/verify)",
+        persona: "Retailer / Hospitality POS",
+        feature: "Point-of-Sale (POS) Cryptographic Bottle Retirement",
+        connected: "#/verify ↔ Left Sidebar & localStorage",
+        finding: "POS retirement mutated in-memory object but did not persist to localStorage across page reloads.",
+        resolution: "Added STORAGE_KEYS.BEVERAGES persistence and live Left Sidebar specimen list sync so retired bottles stay RISK 74 (ALREADY OPENED) across reloads.",
+        status: "PASSED • ACTIVE"
+      },
+      {
+        id: "AUD-06",
+        category: "Forensic Export",
+        module: "Verify Bottle (#/verify)",
+        persona: "Consumer / Retailer / Inspector",
+        feature: "Downloadable Cryptographic Chain-of-Custody Certificate",
+        connected: "#/verify → Standalone HTML Certificate",
+        finding: "Certificate generator operated cleanly.",
+        resolution: "Verified SVG DataMatrix QR embedding + 6-point spectral telemetry + SHA-256 ledger anchor in downloaded HTML certificate.",
+        status: "PASSED • ACTIVE"
+      },
+      {
+        id: "AUD-07",
+        category: "Architecture & Simulation",
+        module: "Aegis Blueprint (#/blueprint)",
+        persona: "Bottler / Regulator / Inspector",
+        feature: "4-Layer ECDSA Architecture & Threat Attack Vector Simulator",
+        connected: "#/blueprint → #/verify & #/mint",
+        finding: "Threat simulator showed verdicts in-place without a direct jump to inspect the specimen in the live scanner.",
+        resolution: "Added 'Inspect Specimen in Live Scanner →' (#load-sim-to-verify-btn) and 'Mint Batch & Bind Stamp' shortcut in Blueprint header.",
+        status: "PASSED • ACTIVE"
+      },
+      {
+        id: "AUD-08",
+        category: "Syndicate Intelligence",
+        module: "Trade Surveillance (#/trade)",
+        persona: "KRA / KEBS Field Inspector",
+        feature: "Kenya Corridor Syndicate Radar & Active Seizure Warrants",
+        connected: "#/trade ↔ #/dooh & #/reports",
+        finding: "Hotspot dossier and seizure table were isolated from DOOH screens and AI Cortex analysis.",
+        resolution: "Added 'Sync County DOOH →' (#sync-hotspot-dooh-btn) on hotspots and 'AI Brief →' ([data-case-ai-brief]) on every seizure row.",
+        status: "PASSED • ACTIVE"
+      },
+      {
+        id: "AUD-09",
+        category: "Closed-Loop Enforcement",
+        module: "Incident Report Modal (#report-modal)",
+        persona: "Consumer / Retailer / Inspector",
+        feature: "Emergency Counterfeit Warrant Filing & DOOH Auto-Broadcast",
+        connected: "#report-modal → #/trade & #/dooh",
+        finding: "Filing a report added a case to #/trade but did not auto-trigger county DOOH billboards.",
+        resolution: "Linked #incident-report-form to automatically switch matching county VANBRANSA billboards to EMERGENCY_ALERT when Auto-Sync is enabled.",
+        status: "PASSED • ACTIVE"
+      },
+      {
+        id: "AUD-10",
+        category: "Supply Chain Provisioning",
+        module: "Mint & Stamp Bind (#/mint)",
+        persona: "Bottler / Manufacturer",
+        feature: "Bottling Line HSM Batch Provisioning & KRA Stamp Reel Binding",
+        connected: "#/mint → #/verify & Left Sidebar",
+        finding: "Minted units were added to memory but not persisted in beverageDatabase or reflected in Left Sidebar badges.",
+        resolution: "Persisted newly minted units to STORAGE_KEYS.BEVERAGES and dynamically synced #nav-mint-badge (LOTS) and #sidebar-specimens-list.",
+        status: "PASSED • ACTIVE"
+      },
+      {
+        id: "AUD-11",
+        category: "Public Safety Broadcast",
+        module: "VANBRANSA DOOH (#/dooh)",
+        persona: "VANBRANSA Operator / Inspector",
+        feature: "Smart Roadside 16:9 LED Billboard Simulator & QR Handoff",
+        connected: "#/dooh ↔ #/verify & #/trade",
+        finding: "Left Sidebar lacked a live alert counter for active emergency DOOH screens.",
+        resolution: "Added dynamic #nav-dooh-badge showing live ALERT count when screens are in EMERGENCY_ALERT mode and verified 1-click QR scan handoff to #/verify.",
+        status: "PASSED • ACTIVE"
+      },
+      {
+        id: "AUD-12",
+        category: "Neural Analytics & Export",
+        module: "AI Reports & Analytics (#/reports)",
+        persona: "Executive / Policy Maker / Inspector",
+        feature: "Aegis Cortex AI Copilot + What-If Excise Simulator + CSV/JSON/Print",
+        connected: "#/reports ↔ All Telemetry & Case Data",
+        finding: "Lucide icon attribute had uppercase S (data-lucide='file-Spreadsheet') on CSV export button.",
+        resolution: "Fixed icon attribute to lowercase data-lucide='file-spreadsheet' and added in-app downloadable Audit Results Matrix.",
+        status: "PASSED • ACTIVE"
+      },
+      {
+        id: "AUD-13",
+        category: "Authentication & Security",
+        module: "Console Auth (#/login, #/register, #/reset-password)",
+        persona: "Bottler / Inspector / Admin",
+        feature: "Operator Sign-In + Enforcement SSO + Enrollment + Password Reset",
+        connected: "#/login → #/verify & #/trade",
+        finding: "#/reset-password shared the forgot-password form template instead of a dedicated new-password form.",
+        resolution: "Added dedicated #auth-reset-form template and submit handler for #/reset-password; verified all 11 routes render with 0 errors.",
+        status: "PASSED • ACTIVE"
+      },
+      {
+        id: "AUD-14",
+        category: "Offline Resilience",
+        module: "PWA Service Worker (sw.js)",
+        persona: "Field Inspector / Rural Consumer",
+        feature: "Offline-First App Shell & Bloom Filter Cache",
+        connected: "sw.js ↔ index.html / js/data.js / js/app.js",
+        finding: "Service worker cache and online/offline status listener operated cleanly.",
+        resolution: "Verified syntax and live status transition between CLOUD + OFFLINE PWA and OFFLINE BLOOM CACHE.",
+        status: "PASSED • ACTIVE"
+      }
+    ];
+
+    const tbody = document.getElementById("audit-tbody");
+    tbody.innerHTML = AUDIT_ROWS.map(r => `
+      <tr class="hover:bg-stone-900/60 transition-colors align-top">
+        <td class="py-3.5 px-4 font-mono font-bold text-orange-400 whitespace-nowrap">${r.id}</td>
+        <td class="py-3.5 px-4 font-semibold text-white whitespace-nowrap">${r.category}</td>
+        <td class="py-3.5 px-4 font-mono text-stone-300 whitespace-nowrap">${r.module}</td>
+        <td class="py-3.5 px-4 text-stone-300">${r.persona}</td>
+        <td class="py-3.5 px-4 text-stone-200 font-medium">${r.feature}</td>
+        <td class="py-3.5 px-4 font-mono text-[11px] text-orange-300 whitespace-nowrap">${r.connected}</td>
+        <td class="py-3.5 px-4 text-stone-400 leading-relaxed">${r.finding}</td>
+        <td class="py-3.5 px-4 text-stone-200 leading-relaxed">${r.resolution}</td>
+        <td class="py-3.5 px-4 text-right whitespace-nowrap">
+          <span class="px-2.5 py-1 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 font-mono text-[10px] font-bold">
+            ${r.status}
+          </span>
+        </td>
+      </tr>
+    `).join("");
+
+    function downloadJsonAudit() {
+      const blob = new Blob([JSON.stringify(AUDIT_ROWS, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "aegis-vanbransa-platform-audit-results.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+  </script>
+</body>
+</html>

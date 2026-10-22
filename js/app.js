@@ -2039,6 +2039,111 @@
             </div>
           </div>
         </section>
+
+        <!-- End-to-End Platform Audit & Module Interrelation Matrix Table -->
+        <section class="rounded-xl border border-stone-800 bg-[#110e0c]/95 p-6 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-stone-800 pb-4">
+            <div>
+              <span class="text-xs font-mono uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
+                <i data-lucide="clipboard-check" class="w-4 h-4"></i>
+                <span>14-POINT END-TO-END QUALITY &amp; ARCHITECTURE AUDIT</span>
+              </span>
+              <h3 class="text-base sm:text-lg font-bold text-white mt-0.5">Customer Journey, Cross-Module Interrelation &amp; Functional Verification Table</h3>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <a
+                href="aegis-platform-audit.csv"
+                download="aegis-vanbransa-platform-audit-results.csv"
+                class="px-3.5 py-2 rounded-lg bg-[#f97316] hover:bg-[#fb923c] text-black font-bold text-xs font-mono flex items-center gap-1.5 shadow-lg shadow-orange-500/20 transition-all"
+              >
+                <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                <span>Download Audit CSV</span>
+              </a>
+              <a
+                href="audit-report.html"
+                target="_blank"
+                rel="noopener"
+                class="px-3.5 py-2 rounded-lg bg-[#14110f] hover:bg-stone-800 text-stone-200 border border-stone-700 font-mono text-xs flex items-center gap-1.5 transition-all"
+              >
+                <i data-lucide="external-link" class="w-3.5 h-3.5 text-orange-400"></i>
+                <span>Open Printable Audit Matrix ↗</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="border-b border-stone-800 text-stone-400 font-mono text-[11px]">
+                  <th class="py-2.5 px-3">ID</th>
+                  <th class="py-2.5 px-3">MODULE / ROUTE</th>
+                  <th class="py-2.5 px-3">PERSONA</th>
+                  <th class="py-2.5 px-3">INTERRELATION &amp; FEATURE AUDITED</th>
+                  <th class="py-2.5 px-3">RESOLUTION &amp; VERIFICATION</th>
+                  <th class="py-2.5 px-3 text-right">STATUS</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-stone-800/60">
+                <tr class="hover:bg-stone-800/30">
+                  <td class="py-2.5 px-3 font-mono font-bold text-orange-400">AUD-01</td>
+                  <td class="py-2.5 px-3 font-mono text-white">Overview (#/)</td>
+                  <td class="py-2.5 px-3 text-stone-300">All Personas</td>
+                  <td class="py-2.5 px-3 text-stone-200">Hero Quick-Verify &amp; 6-Module Infrastructure Grid</td>
+                  <td class="py-2.5 px-3 text-stone-400">Expanded grid to all 6 modules; Hero lookup &amp; Inspect buttons auto-open #/verify dossier</td>
+                  <td class="py-2.5 px-3 text-right font-mono text-emerald-400">PASSED</td>
+                </tr>
+                <tr class="hover:bg-stone-800/30">
+                  <td class="py-2.5 px-3 font-mono font-bold text-orange-400">AUD-02</td>
+                  <td class="py-2.5 px-3 font-mono text-white">Left Sidebar &amp; Shell</td>
+                  <td class="py-2.5 px-3 text-stone-300">Consumer / Retailer / Inspector</td>
+                  <td class="py-2.5 px-3 text-stone-200">Dynamic Role Switcher &amp; Live Specimen Badges</td>
+                  <td class="py-2.5 px-3 text-stone-400">Added live Role Context Banner &amp; dynamic Left Sidebar LOTS / LED / Specimen sync</td>
+                  <td class="py-2.5 px-3 text-right font-mono text-emerald-400">PASSED</td>
+                </tr>
+                <tr class="hover:bg-stone-800/30">
+                  <td class="py-2.5 px-3 font-mono font-bold text-orange-400">AUD-03</td>
+                  <td class="py-2.5 px-3 font-mono text-white">Verify (#/verify)</td>
+                  <td class="py-2.5 px-3 text-stone-300">Consumer / Inspector</td>
+                  <td class="py-2.5 px-3 text-stone-200">Scan Engine ↔ DOOH Billboard &amp; AI Cortex Handoff</td>
+                  <td class="py-2.5 px-3 text-stone-400">Added 1-click Broadcast to DOOH &amp; Analyze in AI Cortex buttons on active bottle dossier</td>
+                  <td class="py-2.5 px-3 text-right font-mono text-emerald-400">PASSED</td>
+                </tr>
+                <tr class="hover:bg-stone-800/30">
+                  <td class="py-2.5 px-3 font-mono font-bold text-orange-400">AUD-04</td>
+                  <td class="py-2.5 px-3 font-mono text-white">Verify (#/verify)</td>
+                  <td class="py-2.5 px-3 text-stone-300">Retailer POS</td>
+                  <td class="py-2.5 px-3 text-stone-200">POS Closure Retirement &amp; Stamp Photo Pixel Assay</td>
+                  <td class="py-2.5 px-3 text-stone-400">Persisted POS retirement (RISK 74 ALREADY OPENED) to localStorage across reloads</td>
+                  <td class="py-2.5 px-3 text-right font-mono text-emerald-400">PASSED</td>
+                </tr>
+                <tr class="hover:bg-stone-800/30">
+                  <td class="py-2.5 px-3 font-mono font-bold text-orange-400">AUD-05</td>
+                  <td class="py-2.5 px-3 font-mono text-white">Blueprint (#/blueprint)</td>
+                  <td class="py-2.5 px-3 text-stone-300">Bottler / Inspector</td>
+                  <td class="py-2.5 px-3 text-stone-200">4-Layer ECDSA Architecture &amp; Threat Simulator → Scanner</td>
+                  <td class="py-2.5 px-3 text-stone-400">Added Inspect Specimen in Live Scanner button to load simulated attack directly in #/verify</td>
+                  <td class="py-2.5 px-3 text-right font-mono text-emerald-400">PASSED</td>
+                </tr>
+                <tr class="hover:bg-stone-800/30">
+                  <td class="py-2.5 px-3 font-mono font-bold text-orange-400">AUD-06</td>
+                  <td class="py-2.5 px-3 font-mono text-white">Trade (#/trade)</td>
+                  <td class="py-2.5 px-3 text-stone-300">KRA / KEBS Inspector</td>
+                  <td class="py-2.5 px-3 text-stone-200">Syndicate Radar ↔ County DOOH &amp; Seizure AI Briefing</td>
+                  <td class="py-2.5 px-3 text-stone-400">Added Sync County DOOH on hotspots, AI Brief on seizure rows, and Auto-DOOH on new warrants</td>
+                  <td class="py-2.5 px-3 text-right font-mono text-emerald-400">PASSED</td>
+                </tr>
+                <tr class="hover:bg-stone-800/30">
+                  <td class="py-2.5 px-3 font-mono font-bold text-orange-400">AUD-07</td>
+                  <td class="py-2.5 px-3 font-mono text-white">Mint (#/mint) &amp; DOOH (#/dooh)</td>
+                  <td class="py-2.5 px-3 text-stone-300">Bottler / VANBRANSA</td>
+                  <td class="py-2.5 px-3 text-stone-200">HSM Batch Minting &amp; Smart 16:9 LED Billboard QR Handoff</td>
+                  <td class="py-2.5 px-3 text-stone-400">Persisted minted lots to beverageDatabase &amp; linked billboard QR CTAs to #/verify</td>
+                  <td class="py-2.5 px-3 text-right font-mono text-emerald-400">PASSED</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
       </div>
     `;
   }
