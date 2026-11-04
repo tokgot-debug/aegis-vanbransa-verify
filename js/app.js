@@ -1161,181 +1161,228 @@
     const layers = window.SENTINEL_DATA.blueprintLayers;
     const activeLayer = layers[state.blueprintActiveLayer] || layers[0];
 
+    const layerShortLabels = ["Unit Identity", "Optical Vision", "Risk Graph", "Enforcement"];
+    const layerIcons = ["arrow-up-right", "arrow-up-right", "key-round", "route"];
+    const specIcons = ["fingerprint", "shield-check", "scan-line", "lock"];
+
     const scenarios = {
       authentic: {
         title: "Genuine Factory-Sealed Bottle",
-        stampHash: "VALID • ECDSA-P256 Match (0x8f4e...91c2)",
-        opticalCheck: "PASS • 365nm Dual-Peak Taggant & Intaglio Verified",
-        velocityCheck: "PASS • Single Retail Scan in Designated Zone KE-01",
-        finalVerdict: "ALLOW SALE • RISK 3 (GENUINE)",
-        color: "emerald",
+        verdictShort: "Risk 3",
+        verdictSub: "Allow sale · Genuine",
+        cryptoShort: "Valid",
+        cryptoSub: "ECDSA-P256 bound",
+        opticalShort: "Pass",
+        opticalSub: "365nm UV & seal intact",
+        velocityShort: "1 Scan",
+        velocitySub: "Authorized Zone KE-01",
+        cardBg: "bg-[#0e4829]",
         specimenSerial: "AEG-2026-8841-KEN"
       },
-      cloned: {
-        title: "Photocopied / Cloned Excise Stamp Ring",
-        stampHash: "WARN • Valid Serial String, Bound to 500ml Water SKU",
-        opticalCheck: "FAIL • Halftone CMYK Toner Dots & Zero UV Fluorescence",
-        velocityCheck: "FAIL • Scanned 87x Across 5 Sub-Counties in 4 Hours",
-        finalVerdict: "BLOCK & DISPATCH RAID • RISK 98",
-        color: "rose",
-        specimenSerial: "AEG-FAKE-0013-CLN"
-      },
       refilled: {
-        title: "Post-Retirement Refill (`SNT-FA24-57D2-13EE-EC26`)",
-        stampHash: "PASS • Original Bottle Identity Exists",
-        opticalCheck: "WARN • Closure Tamper Loop Previously Opened",
-        velocityCheck: "FAIL • `already_opened` + `post_retirement_scan` in Nakuru",
-        finalVerdict: "QUARANTINE • RISK 74 (ALREADY OPENED)",
-        color: "amber",
+        title: "Post-Retirement Refill",
+        verdictShort: "Risk 74",
+        verdictSub: "Quarantine · Opened",
+        cryptoShort: "Pass",
+        cryptoSub: "Original serial exists",
+        opticalShort: "Opened",
+        opticalSub: "Cap tamper loop broken",
+        velocityShort: "4 Scans",
+        velocitySub: "Post-retirement Nakuru",
+        cardBg: "bg-[#472a0e]",
         specimenSerial: "SNT-FA24-57D2-13EE-EC26"
+      },
+      cloned: {
+        title: "Cloned Excise Stamp Ring",
+        verdictShort: "Risk 98",
+        verdictSub: "Block & dispatch raid",
+        cryptoShort: "Mismatch",
+        cryptoSub: "Issued to 500ml water",
+        opticalShort: "Failed",
+        opticalSub: "CMYK toner · 0% UV",
+        velocityShort: "87 Scans",
+        velocitySub: "5 sub-counties in 4h",
+        cardBg: "bg-[#4c141d]",
+        specimenSerial: "AEG-FAKE-0013-CLN"
       }
     };
     const sim = scenarios[state.blueprintTestScenario] || scenarios.authentic;
 
     return `
       <div class="view-animate space-y-8">
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-stone-800 pb-5">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/[0.06] pb-5">
           <div>
             <div class="flex items-center gap-2 text-xs font-mono text-orange-500 uppercase tracking-widest">
               <i data-lucide="cpu" class="w-4 h-4"></i>
-              <span>PROJECT AEGIS • TECHNICAL INFRASTRUCTURE BLUEPRINT</span>
+              <span>PROJECT AEGIS · INFRASTRUCTURE BLUEPRINT</span>
             </div>
             <h1 class="text-2xl sm:text-3xl font-extrabold text-white mt-1">How Aegis Binds Identity to Every Bottle</h1>
           </div>
-          <div class="flex flex-wrap items-center gap-2 self-start">
-            <a href="#/mint" class="px-3.5 py-2.5 rounded bg-[#14110f] hover:bg-stone-800 border border-stone-700 text-emerald-400 font-mono font-semibold text-xs flex items-center gap-2">
+          <div class="flex flex-wrap items-center gap-2.5 self-start">
+            <a href="#/mint" class="px-4 py-2.5 rounded-full bg-[#111312] hover:bg-white/[0.08] border border-white/[0.06] text-emerald-400 font-medium text-xs flex items-center gap-2 transition-all">
               <i data-lucide="qr-code" class="w-4 h-4"></i>
-              <span>Mint Batch &amp; Bind Stamp</span>
+              <span>Mint Batch</span>
             </a>
-            <a href="#/verify" class="px-4 py-2.5 rounded bg-[#f97316] hover:bg-[#fb923c] text-black font-bold text-xs flex items-center gap-2">
+            <a href="#/verify" class="px-5 py-2.5 rounded-full bg-[#f97316] hover:bg-[#fb923c] text-black font-bold text-xs flex items-center gap-2 transition-all">
               <i data-lucide="scan-line" class="w-4 h-4"></i>
-              <span>Check a bottle now</span>
+              <span>Check a Bottle</span>
             </a>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-7">
-          <div class="lg:col-span-5 space-y-3">
-            <span class="text-xs font-mono uppercase tracking-wider text-stone-400 block">Select Infrastructure Layer:</span>
-            ${layers.map((layer, idx) => `
-              <button
-                type="button"
-                data-blueprint-layer="${idx}"
-                class="w-full text-left p-5 rounded-xl border transition-all ${
-                  idx === state.blueprintActiveLayer
-                    ? "bg-[#14110f] border-orange-500/60 shadow-lg shadow-orange-500/10"
-                    : "bg-[#110e0c]/60 border-stone-800 hover:bg-[#14110f]"
-                }"
-              >
-                <div class="flex items-center justify-between text-xs font-mono">
-                  <span class="text-orange-400 font-bold">${escapeHtml(layer.code)}</span>
-                  <span class="text-stone-400">Latency: ${escapeHtml(layer.latency)}</span>
-                </div>
-                <h3 class="text-base font-bold text-white mt-1.5">${escapeHtml(layer.title)}</h3>
-                <p class="text-xs text-stone-400 mt-1 line-clamp-2">${escapeHtml(layer.description)}</p>
-              </button>
-            `).join("")}
+        <!-- 4-Card Infrastructure Layer Selector (Exact Attachment-2 Design) -->
+        <section class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            ${layers.map((layer, idx) => {
+              const isActive = idx === state.blueprintActiveLayer;
+              const shortLabel = layerShortLabels[idx] || layer.code;
+              const iconName = layerIcons[idx] || "arrow-up-right";
+              return `
+                <button
+                  type="button"
+                  data-blueprint-layer="${idx}"
+                  class="text-left rounded-[28px] p-6 flex flex-col justify-between min-h-[172px] transition-all cursor-pointer ${
+                    isActive
+                      ? "bg-[#0e4829] shadow-xl shadow-emerald-950/40"
+                      : "bg-[#111312] border border-white/[0.04] hover:bg-[#161918]"
+                  }"
+                >
+                  <div class="flex items-center justify-between gap-2 w-full">
+                    <span class="text-sm font-medium ${isActive ? "text-white/80" : "text-stone-400"}">${escapeHtml(shortLabel)}</span>
+                    <span class="w-9 h-9 rounded-full ${
+                      isActive ? "bg-black/25 text-white/90" : "bg-white/[0.05] text-stone-300"
+                    } flex items-center justify-center shrink-0">
+                      <i data-lucide="${iconName}" class="w-4 h-4"></i>
+                    </span>
+                  </div>
+                  <div class="pt-8">
+                    <p class="text-3xl sm:text-4xl font-bold text-white tracking-tight leading-none">${escapeHtml(layer.latency)}</p>
+                    <p class="text-xs ${isActive ? "text-white/65" : "text-stone-500"} mt-2 truncate">L${idx + 1} · ${escapeHtml(layer.accuracy)} accuracy</p>
+                  </div>
+                </button>
+              `;
+            }).join("")}
           </div>
 
-          <div class="lg:col-span-7 rounded-xl border border-stone-800 bg-[#110e0c]/90 p-6 sm:p-8 flex flex-col justify-between space-y-6">
-            <div class="space-y-4">
-              <div class="flex flex-wrap items-center justify-between gap-2 border-b border-stone-800 pb-4">
-                <span class="px-3 py-1 rounded bg-orange-500/15 border border-orange-500/30 text-orange-300 text-xs font-mono font-semibold">
-                  ${escapeHtml(activeLayer.code)}
+          <!-- Selected Layer Clean Summary & 4-Card Specs Strip -->
+          <div class="rounded-[28px] bg-[#111312] border border-white/[0.04] p-6 sm:p-8 space-y-6">
+            <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
+              <div class="space-y-2 max-w-3xl">
+                <span class="px-3 py-1 rounded-full bg-white/[0.05] text-xs font-mono text-emerald-400 inline-block">
+                  ${escapeHtml(activeLayer.code)} · ${escapeHtml(activeLayer.accuracy)} ACCURACY
                 </span>
-                <div class="flex items-center gap-4 text-xs font-mono">
-                  <span class="text-stone-400">STAGE LATENCY: <strong class="text-white">${escapeHtml(activeLayer.latency)}</strong></span>
-                  <span class="text-stone-400">ACCURACY: <strong class="text-orange-400">${escapeHtml(activeLayer.accuracy)}</strong></span>
-                </div>
+                <h2 class="text-xl sm:text-2xl font-bold text-white tracking-tight">${escapeHtml(activeLayer.title)}</h2>
+                <p class="text-sm text-stone-400 leading-relaxed">${escapeHtml(activeLayer.description)}</p>
               </div>
-
-              <h2 class="text-xl sm:text-2xl font-bold text-white">${escapeHtml(activeLayer.title)}</h2>
-              <p class="text-sm text-stone-300 leading-relaxed">${escapeHtml(activeLayer.description)}</p>
-
-              <div class="space-y-2.5 pt-2">
-                <h4 class="text-xs font-mono uppercase tracking-wider text-stone-400">Technical Specifications:</h4>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  ${activeLayer.specs.map(spec => `
-                    <div class="p-3.5 rounded-lg bg-[#080706] border border-stone-800 flex items-start gap-2.5 text-xs text-stone-200">
-                      <i data-lucide="check-circle-2" class="w-4 h-4 text-orange-500 shrink-0 mt-0.5"></i>
-                      <span>${escapeHtml(spec)}</span>
-                    </div>
-                  `).join("")}
-                </div>
+              <div class="text-xs font-mono text-stone-500 shrink-0">
+                PIPELINE BUDGET: <strong class="text-white">&lt; 150 ms</strong>
               </div>
             </div>
 
-            <div class="p-4 rounded-lg bg-[#080706] border border-stone-800 space-y-2">
-              <div class="text-[11px] font-mono text-stone-400">AEGIS REAL-TIME SCORING PIPELINE (&lt; 150ms)</div>
-              <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 text-xs font-mono">
-                <div class="p-2.5 rounded bg-[#120f0d] border border-stone-800 text-center">
-                  <span class="text-orange-400 block">1. BIND</span>
-                  <span class="text-[11px] text-stone-300">Unit + Stamp</span>
+            <!-- 4-Card Technical Spec Tiles (Attachment-2 Style) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+              ${activeLayer.specs.map((spec, sIdx) => `
+                <div class="rounded-[24px] bg-[#0a0c0b] border border-white/[0.04] p-5 flex flex-col justify-between min-h-[144px]">
+                  <div class="flex items-center justify-between gap-2">
+                    <span class="text-xs font-medium text-stone-500">Spec 0${sIdx + 1}</span>
+                    <span class="w-8 h-8 rounded-full bg-white/[0.05] flex items-center justify-center text-emerald-400 shrink-0">
+                      <i data-lucide="${specIcons[sIdx % specIcons.length]}" class="w-3.5 h-3.5"></i>
+                    </span>
+                  </div>
+                  <p class="text-xs sm:text-[13px] font-medium text-stone-200 leading-snug pt-5">${escapeHtml(spec)}</p>
                 </div>
-                <div class="p-2.5 rounded bg-[#120f0d] border border-stone-800 text-center">
-                  <span class="text-orange-400 block">2. SCAN</span>
-                  <span class="text-[11px] text-stone-300">Phone / Optical</span>
-                </div>
-                <div class="p-2.5 rounded bg-[#120f0d] border border-stone-800 text-center">
-                  <span class="text-orange-400 block">3. SCORE</span>
-                  <span class="text-[11px] text-stone-300">Risk & Velocity</span>
-                </div>
-                <div class="p-2.5 rounded bg-[#120f0d] border border-stone-800 text-center">
-                  <span class="text-orange-400 block">4. INTERCEPT</span>
-                  <span class="text-[11px] text-stone-300">Network Graph</span>
-                </div>
-              </div>
+              `).join("")}
             </div>
           </div>
-        </div>
+        </section>
 
-        <!-- Threat Attack Vector Simulator -->
-        <section class="rounded-xl border border-stone-800 bg-[#110e0c]/90 p-6 sm:p-8 space-y-5">
+        <!-- Threat Attack Vector Simulator (4-Card Attachment-2 Style) -->
+        <section class="space-y-4">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <span class="text-xs font-mono uppercase tracking-wider text-orange-500">Interactive Scoring Simulator</span>
-              <h3 class="text-lg sm:text-xl font-bold text-white">Test How Aegis Scores Real-World Counterfeit Scenarios</h3>
+              <h3 class="text-lg sm:text-xl font-bold text-white">Real-Time Counterfeit Scoring Simulator</h3>
+              <p class="text-xs text-stone-400 mt-0.5">Select a scenario to inspect how the 4-layer pipeline responds</p>
             </div>
             <div class="flex flex-wrap gap-2">
-              <button type="button" data-sim-scenario="authentic" class="px-3.5 py-2 rounded text-xs font-mono font-semibold border transition-all ${
-                state.blueprintTestScenario === "authentic" ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-300" : "bg-[#080706] border-stone-800 text-stone-400"
-              }">1. Genuine Bottle</button>
-              <button type="button" data-sim-scenario="refilled" class="px-3.5 py-2 rounded text-xs font-mono font-semibold border transition-all ${
-                state.blueprintTestScenario === "refilled" ? "bg-amber-500/20 border-amber-500/50 text-amber-300" : "bg-[#080706] border-stone-800 text-stone-400"
-              }">2. Already Opened (RISK 74)</button>
-              <button type="button" data-sim-scenario="cloned" class="px-3.5 py-2 rounded text-xs font-mono font-semibold border transition-all ${
-                state.blueprintTestScenario === "cloned" ? "bg-rose-500/20 border-rose-500/50 text-rose-300" : "bg-[#080706] border-stone-800 text-stone-400"
-              }">3. Cloned Stamp Syndicate</button>
+              <button type="button" data-sim-scenario="authentic" class="px-4 py-2 rounded-full text-xs font-medium transition-all ${
+                state.blueprintTestScenario === "authentic"
+                  ? "bg-[#0e4829] text-white font-semibold"
+                  : "bg-[#111312] text-stone-400 hover:text-white"
+              }">Genuine</button>
+              <button type="button" data-sim-scenario="refilled" class="px-4 py-2 rounded-full text-xs font-medium transition-all ${
+                state.blueprintTestScenario === "refilled"
+                  ? "bg-[#472a0e] text-amber-200 font-semibold"
+                  : "bg-[#111312] text-stone-400 hover:text-white"
+              }">Already Opened</button>
+              <button type="button" data-sim-scenario="cloned" class="px-4 py-2 rounded-full text-xs font-medium transition-all ${
+                state.blueprintTestScenario === "cloned"
+                  ? "bg-[#4c141d] text-rose-200 font-semibold"
+                  : "bg-[#111312] text-stone-400 hover:text-white"
+              }">Cloned Stamp</button>
             </div>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs">
-            <div class="p-4 rounded-lg bg-[#080706] border border-stone-800 space-y-1">
-              <span class="text-[10px] font-mono text-stone-400">L1 • CRYPTOGRAPHIC IDENTITY</span>
-              <p class="font-semibold text-white">${escapeHtml(sim.stampHash)}</p>
-            </div>
-            <div class="p-4 rounded-lg bg-[#080706] border border-stone-800 space-y-1">
-              <span class="text-[10px] font-mono text-stone-400">L2 • OPTICAL & CLOSURE STATE</span>
-              <p class="font-semibold text-white">${escapeHtml(sim.opticalCheck)}</p>
-            </div>
-            <div class="p-4 rounded-lg bg-[#080706] border border-stone-800 space-y-1">
-              <span class="text-[10px] font-mono text-stone-400">L3 • NETWORK & VELOCITY</span>
-              <p class="font-semibold text-white">${escapeHtml(sim.velocityCheck)}</p>
-            </div>
-            <div class="p-4 rounded-lg bg-[#080706] border border-orange-500/40 space-y-2 flex flex-col justify-between">
-              <div>
-                <span class="text-[10px] font-mono text-orange-400">AEGIS ENGINE VERDICT</span>
-                <p class="font-bold text-orange-300 mt-0.5">${escapeHtml(sim.finalVerdict)}</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- Featured Verdict Card -->
+            <div class="rounded-[28px] ${sim.cardBg} p-6 flex flex-col justify-between min-h-[168px]">
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-sm font-medium text-white/80">Verdict</span>
+                <button
+                  type="button"
+                  id="load-sim-to-verify-btn"
+                  data-sim-serial="${escapeHtml(sim.specimenSerial)}"
+                  title="Inspect Specimen in Live Scanner"
+                  class="w-9 h-9 rounded-full bg-black/25 hover:bg-black/45 flex items-center justify-center text-white transition-all cursor-pointer"
+                >
+                  <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                </button>
               </div>
-              <button
-                type="button"
-                id="load-sim-to-verify-btn"
-                data-sim-serial="${escapeHtml(sim.specimenSerial)}"
-                class="w-full py-1.5 px-2.5 rounded bg-orange-500/20 hover:bg-orange-500/30 border border-orange-500/40 text-orange-300 font-mono text-[11px] font-semibold flex items-center justify-center gap-1.5 transition-all"
-              >
-                <i data-lucide="scan-line" class="w-3.5 h-3.5"></i>
-                <span>Inspect Specimen in Live Scanner →</span>
-              </button>
+              <div class="pt-7">
+                <p class="text-3xl sm:text-4xl font-bold text-white tracking-tight leading-none">${escapeHtml(sim.verdictShort)}</p>
+                <p class="text-xs text-white/70 mt-2 truncate">${escapeHtml(sim.verdictSub)}</p>
+              </div>
+            </div>
+
+            <!-- Cryptographic Tile -->
+            <div class="rounded-[28px] bg-[#111312] border border-white/[0.04] p-6 flex flex-col justify-between min-h-[168px]">
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-sm font-medium text-stone-400">Cryptographic</span>
+                <span class="w-9 h-9 rounded-full bg-white/[0.05] flex items-center justify-center text-stone-300">
+                  <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                </span>
+              </div>
+              <div class="pt-7">
+                <p class="text-3xl font-bold text-white tracking-tight leading-none">${escapeHtml(sim.cryptoShort)}</p>
+                <p class="text-xs text-stone-500 mt-2 truncate">${escapeHtml(sim.cryptoSub)}</p>
+              </div>
+            </div>
+
+            <!-- Optical & Closure Tile -->
+            <div class="rounded-[28px] bg-[#111312] border border-white/[0.04] p-6 flex flex-col justify-between min-h-[168px]">
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-sm font-medium text-stone-400">Optical &amp; Seal</span>
+                <span class="w-9 h-9 rounded-full bg-white/[0.05] flex items-center justify-center text-stone-300">
+                  <i data-lucide="key-round" class="w-4 h-4"></i>
+                </span>
+              </div>
+              <div class="pt-7">
+                <p class="text-3xl font-bold text-white tracking-tight leading-none">${escapeHtml(sim.opticalShort)}</p>
+                <p class="text-xs text-stone-500 mt-2 truncate">${escapeHtml(sim.opticalSub)}</p>
+              </div>
+            </div>
+
+            <!-- Velocity Graph Tile -->
+            <div class="rounded-[28px] bg-[#111312] border border-white/[0.04] p-6 flex flex-col justify-between min-h-[168px]">
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-sm font-medium text-stone-400">Velocity</span>
+                <span class="w-9 h-9 rounded-full bg-white/[0.05] flex items-center justify-center text-stone-300">
+                  <i data-lucide="route" class="w-4 h-4"></i>
+                </span>
+              </div>
+              <div class="pt-7">
+                <p class="text-3xl font-bold text-white tracking-tight leading-none">${escapeHtml(sim.velocityShort)}</p>
+                <p class="text-xs text-stone-500 mt-2 truncate">${escapeHtml(sim.velocitySub)}</p>
+              </div>
             </div>
           </div>
         </section>

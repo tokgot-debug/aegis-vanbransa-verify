@@ -294,6 +294,20 @@ window.SENTINEL_DATA = {
         "Automated KRA / KEBS / County Public Health enforcement webhook dispatch",
         "Immutable custody chain anchoring from bottling line to retail POS"
       ]
+    },
+    {
+      id: "layer-dooh",
+      code: "L4 • DOOH & ENFORCEMENT",
+      title: "Smart Roadside DOOH Triggers & Multi-Agency Raid Dispatch",
+      latency: "35 ms",
+      accuracy: "99.9%",
+      description: "Automatically synchronizes high-risk county counterfeit spikes to VANBRANSA digital roadside billboards while dispatching signed seizure warrants to KRA and KEBS field teams.",
+      specs: [
+        "Sub-second county risk broadcast to VANBRANSA 16:9 LED gantries",
+        "Dynamic consumer QR verification handoff on roadside smart screens",
+        "Signed HMAC webhook dispatch to KRA Excise & KEBS field units",
+        "Instant batch quarantine kill-switch across all retail POS terminals"
+      ]
     }
   ],
 
