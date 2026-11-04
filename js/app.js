@@ -785,60 +785,56 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-7">
           <!-- Left Column: Optical Viewport & Unit Selector -->
           <div class="lg:col-span-5 space-y-5">
-            <div class="rounded-xl border border-stone-800 bg-[#110e0c]/90 p-5 space-y-4 ${state.uvMode ? "uv-glow-active" : ""}">
+            <div class="rounded-[26px] border border-white/[0.05] bg-[#111312] p-6 space-y-5 ${state.uvMode ? "uv-glow-active" : ""}">
               <div class="flex items-center justify-between text-xs font-mono">
-                <span class="text-stone-300 flex items-center gap-1.5">
+                <span class="text-stone-300 flex items-center gap-2">
                   <span class="w-2 h-2 rounded-full ${state.uvMode ? "bg-purple-400" : "bg-orange-500"} animate-pulse"></span>
-                  ${state.uvMode ? "UV-365nm FLUORESCENCE SPECTROMETER" : "SCAN ENGINE • LIVE"}
+                  ${state.uvMode ? "UV-365nm SPECTROMETER" : "SCAN ENGINE · LIVE"}
                 </span>
-                <span class="text-orange-400">RISK ${p.riskScore}</span>
+                <span class="px-2.5 py-1 rounded-full bg-white/[0.05] text-stone-300">RISK ${p.riskScore}</span>
               </div>
 
               <!-- Viewport Container -->
-              <div class="relative h-64 rounded-lg bg-[#080706] border border-stone-800 flex flex-col items-center justify-center p-5 overflow-hidden">
+              <div class="relative h-60 rounded-[22px] bg-[#090a09] border border-white/[0.05] flex flex-col items-center justify-center p-5 overflow-hidden">
                 <video id="scanner-video" autoplay playsinline muted class="${state.cameraActive ? "block" : "hidden"} absolute inset-0 w-full h-full object-cover opacity-65"></video>
 
                 <div class="scanner-laser ${state.uvMode ? "uv-mode" : ""}"></div>
 
-                <div class="absolute top-3 left-3 w-6 h-6 border-t-2 border-l-2 ${state.uvMode ? "border-purple-400" : "border-orange-500"}"></div>
-                <div class="absolute top-3 right-3 w-6 h-6 border-t-2 border-r-2 ${state.uvMode ? "border-purple-400" : "border-orange-500"}"></div>
-                <div class="absolute bottom-3 left-3 w-6 h-6 border-b-2 border-l-2 ${state.uvMode ? "border-purple-400" : "border-orange-500"}"></div>
-                <div class="absolute bottom-3 right-3 w-6 h-6 border-b-2 border-r-2 ${state.uvMode ? "border-purple-400" : "border-orange-500"}"></div>
+                <div class="absolute top-3.5 left-3.5 w-5 h-5 border-t-2 border-l-2 rounded-tl-md ${state.uvMode ? "border-purple-400" : "border-orange-500"}"></div>
+                <div class="absolute top-3.5 right-3.5 w-5 h-5 border-t-2 border-r-2 rounded-tr-md ${state.uvMode ? "border-purple-400" : "border-orange-500"}"></div>
+                <div class="absolute bottom-3.5 left-3.5 w-5 h-5 border-b-2 border-l-2 rounded-bl-md ${state.uvMode ? "border-purple-400" : "border-orange-500"}"></div>
+                <div class="absolute bottom-3.5 right-3.5 w-5 h-5 border-b-2 border-r-2 rounded-br-md ${state.uvMode ? "border-purple-400" : "border-orange-500"}"></div>
 
-                <div class="relative z-10 w-full max-w-xs rounded-lg border ${
+                <div class="relative z-10 w-full max-w-xs rounded-2xl border ${
                   isCounterfeit
-                    ? "border-rose-500/60 bg-rose-950/50"
+                    ? "border-rose-500/40 bg-[#2b0c12]/90"
                     : isSuspicious
-                    ? "border-amber-500/60 bg-[#1a140e]/90"
-                    : "border-emerald-500/50 bg-[#120f0d]/90"
+                    ? "border-amber-500/40 bg-[#241608]/90"
+                    : "border-emerald-500/40 bg-[#0b2617]/90"
                 } p-4 backdrop-blur-md space-y-2 text-left shadow-2xl">
-                  <div class="flex items-center justify-between text-[10px] font-mono text-stone-400 border-b border-stone-800 pb-1.5">
-                    <span>AEGIS UNIT IDENTITY</span>
-                    <span class="text-orange-400">● SCORING</span>
+                  <div class="flex items-center justify-between text-[11px] text-white/60 pb-1">
+                    <span>Unit Identity</span>
+                    <span class="font-mono text-white/80">● Live</span>
                   </div>
-                  <p class="text-xs font-mono text-stone-200">${escapeHtml(p.serial)}</p>
-                  <p class="text-xs text-stone-400 truncate">${escapeHtml(p.name)}</p>
-                  <div class="pt-1 flex items-center justify-between">
-                    ${statusBadgeHTML(p.status, p.verdictBadge)}
-                    <span class="text-[11px] font-mono text-stone-300">RISK ${p.riskScore}</span>
-                  </div>
+                  <p class="text-xs font-mono text-white font-semibold">${escapeHtml(p.serial)}</p>
+                  <p class="text-xs text-white/70 truncate">${escapeHtml(p.name)}</p>
                 </div>
               </div>
 
               <!-- Manual Serial Lookup -->
               <form id="verify-serial-form" class="space-y-2">
-                <label class="block text-xs font-medium text-stone-300">Enter Unit Identity, Excise Stamp, or GTIN</label>
+                <label class="block text-xs font-medium text-stone-400">Unit Identity, Stamp, or GTIN</label>
                 <div class="flex gap-2">
                   <input
                     type="text"
                     id="verify-serial-input"
                     value="${escapeHtml(p.serial)}"
                     placeholder="SNT-FA24-57D2-13EE-EC26"
-                    class="flex-1 px-3.5 py-2.5 rounded-lg bg-[#080706] border border-stone-800 text-xs sm:text-sm font-mono text-white focus:border-orange-500 focus:outline-none"
+                    class="flex-1 px-4 py-2.5 rounded-2xl bg-[#090a09] border border-white/[0.06] text-xs sm:text-sm font-mono text-white focus:border-orange-500 focus:outline-none"
                   />
                   <button
                     type="submit"
-                    class="px-4 py-2.5 rounded-lg bg-[#f97316] hover:bg-[#fb923c] text-black font-bold text-xs sm:text-sm flex items-center gap-1.5 shrink-0 transition-all"
+                    class="px-5 py-2.5 rounded-2xl bg-[#f97316] hover:bg-[#fb923c] text-black font-bold text-xs sm:text-sm flex items-center gap-1.5 shrink-0 transition-all"
                   >
                     <i data-lucide="zap" class="w-4 h-4"></i>
                     <span>Score</span>
@@ -847,32 +843,29 @@
               </form>
 
               <!-- Stamp Photo Pixel & Halftone Forensic Upload -->
-              <div class="p-3.5 rounded-lg bg-[#080706] border border-stone-800 space-y-2.5">
+              <div class="p-4 rounded-[20px] bg-[#090a09] border border-white/[0.05] space-y-2.5">
                 <div class="flex items-center justify-between">
-                  <span class="text-[11px] font-mono uppercase tracking-wider text-orange-400 flex items-center gap-1.5">
-                    <i data-lucide="image-plus" class="w-3.5 h-3.5"></i>
-                    <span>Optical Stamp Photo Forensics</span>
+                  <span class="text-xs font-medium text-stone-300 flex items-center gap-2">
+                    <i data-lucide="image-plus" class="w-4 h-4 text-orange-400"></i>
+                    <span>Stamp Photo Assay</span>
                   </span>
-                  <span class="text-[10px] font-mono text-stone-400">CMYK / UV Assay</span>
+                  <span class="text-[11px] text-stone-500">CMYK / UV</span>
                 </div>
-                <p class="text-[11px] text-stone-400 leading-relaxed">
-                  Upload or snap a macro photo of a physical KRA excise stamp or QR label to inspect pixel contrast, halftone toner dots, and 365nm taggant density.
-                </p>
-                <label class="w-full py-2 px-3 rounded-lg bg-[#14110f] hover:bg-stone-800 border border-stone-700 text-xs font-mono text-stone-200 flex items-center justify-center gap-2 cursor-pointer transition-all">
+                <label class="w-full py-2.5 px-4 rounded-xl bg-white/[0.05] hover:bg-white/[0.09] text-xs font-medium text-stone-200 flex items-center justify-center gap-2 cursor-pointer transition-all">
                   <i data-lucide="upload" class="w-3.5 h-3.5 text-orange-400"></i>
-                  <span>Analyze Stamp / Bottle Photo</span>
+                  <span>Upload Stamp or Bottle Photo</span>
                   <input type="file" id="stamp-photo-input" accept="image/*" class="hidden" />
                 </label>
                 ${
                   state.photoForensicResult
                     ? `
-                  <div class="p-3 rounded-lg bg-[#120f0d] border border-orange-500/40 text-xs space-y-1">
-                    <div class="flex items-center justify-between font-mono text-[11px]">
-                      <span class="text-orange-300 font-bold">${escapeHtml(state.photoForensicResult.fileName)}</span>
-                      <span class="text-emerald-400">${escapeHtml(state.photoForensicResult.verdict)}</span>
+                  <div class="p-3 rounded-xl bg-[#111312] border border-orange-500/30 text-xs space-y-1">
+                    <div class="flex items-center justify-between text-[11px]">
+                      <span class="text-orange-300 font-semibold">${escapeHtml(state.photoForensicResult.fileName)}</span>
+                      <span class="text-emerald-400 font-mono">${escapeHtml(state.photoForensicResult.verdict)}</span>
                     </div>
-                    <p class="text-[11px] text-stone-300 font-mono">
-                      Contrast: ${escapeHtml(state.photoForensicResult.contrast)} • Taggant SNR: ${escapeHtml(state.photoForensicResult.snr)} • ${escapeHtml(state.photoForensicResult.resolution)}
+                    <p class="text-[11px] text-stone-400">
+                      ${escapeHtml(state.photoForensicResult.contrast)} · SNR ${escapeHtml(state.photoForensicResult.snr)}
                     </p>
                   </div>
                 `
@@ -881,22 +874,22 @@
               </div>
 
               <!-- Sample Specimens List -->
-              <div class="space-y-2 pt-2 border-t border-stone-800">
-                <span class="text-xs font-mono text-stone-400 block">SELECT TEST BOTTLE SPECIMEN:</span>
+              <div class="space-y-2 pt-2 border-t border-white/[0.05]">
+                <span class="text-xs font-medium text-stone-400 block">Test Bottle Specimens</span>
                 <div class="grid grid-cols-1 gap-2">
                   ${window.SENTINEL_DATA.beverageDatabase.map(item => `
                     <button
                       type="button"
                       data-select-serial="${escapeHtml(item.serial)}"
-                      class="w-full text-left p-2.5 rounded-lg border transition-all flex items-center justify-between gap-2 ${
+                      class="w-full text-left p-3 rounded-2xl border transition-all flex items-center justify-between gap-2 ${
                         item.serial === p.serial
-                          ? "bg-stone-800/90 border-orange-500/50 text-white"
-                          : "bg-[#080706]/70 border-stone-800 text-stone-300 hover:bg-stone-900"
+                          ? "bg-white/[0.07] border-orange-500/40 text-white"
+                          : "bg-[#090a09] border-white/[0.04] text-stone-300 hover:bg-white/[0.04]"
                       }"
                     >
                       <div class="min-w-0">
                         <p class="text-xs font-semibold truncate">${escapeHtml(item.name)}</p>
-                        <p class="text-[11px] font-mono text-stone-400">${escapeHtml(item.serial)}</p>
+                        <p class="text-[11px] font-mono text-stone-500">${escapeHtml(item.serial)}</p>
                       </div>
                       <div class="shrink-0">${statusBadgeHTML(item.status, item.verdictBadge)}</div>
                     </button>
@@ -906,194 +899,262 @@
             </div>
           </div>
 
-          <!-- Right Column: Forensic Dossier & Custody Chain -->
+          <!-- Right Column: Clean Attachment-2 Metric Card Layout & Custody Ledger -->
           <div class="lg:col-span-7 space-y-5">
-            <div class="rounded-xl border border-stone-800 bg-[#110e0c]/90 p-6 space-y-5">
-              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-stone-800 pb-4">
-                <div>
-                  <div class="flex items-center gap-2.5">
-                    ${statusBadgeHTML(p.status, p.verdictBadge)}
-                    <span class="text-xs font-mono text-stone-400">STAMP: ${escapeHtml(p.stampCode)}</span>
-                  </div>
-                  <h2 class="text-xl sm:text-2xl font-bold text-white mt-2">${escapeHtml(p.name)}</h2>
-                  <p class="text-xs text-stone-400">${escapeHtml(p.brand)} • ${escapeHtml(p.category)} • ${escapeHtml(p.abv)}</p>
-                </div>
+            ${(() => {
+              const closureShort = isCounterfeit
+                ? "Tampered"
+                : isSuspicious || /broken|opened|retired/i.test(p.spectralSignature.capTorqueSeal)
+                ? "Opened"
+                : "Sealed";
 
-                <div class="flex items-center gap-3 shrink-0">
-                  <div class="p-1.5 rounded-lg bg-[#080706] border border-stone-800 hidden sm:block" title="Unit Cryptographic DataMatrix">
-                    ${generateQrSvg(p.serial, 68, isCounterfeit ? "#f43f5e" : isSuspicious ? "#f59e0b" : "#10b981", "#080706")}
-                  </div>
-                  <div class="flex sm:flex-col items-end justify-between gap-1 bg-[#080706] px-4 py-3 rounded-lg border border-stone-800">
-                    <span class="text-[10px] font-mono text-stone-400 uppercase">AEGIS RISK SCORE</span>
-                    <span class="text-2xl font-extrabold font-mono ${
-                      isCounterfeit ? "text-rose-400" : isSuspicious ? "text-amber-400" : "text-emerald-400"
-                    }">RISK ${p.riskScore}</span>
-                    <span class="text-[11px] font-mono text-stone-400">Confidence: ${p.confidence}%</span>
-                  </div>
-                </div>
-              </div>
+              const ppmMatch = (p.spectralSignature.methanolPpm || "").match(/(<?\s*\d+(?:\.\d+)?\s*ppm)/i);
+              const methanolShort = ppmMatch
+                ? ppmMatch[1].replace(/\s+/g, " ").trim()
+                : isCounterfeit
+                ? "Toxic"
+                : "Safe";
 
-              <!-- Telemetry Flags Strip -->
-              <div class="flex flex-wrap items-center gap-2">
-                <span class="text-[11px] font-mono text-stone-400 uppercase">Scoring Flags:</span>
-                ${flags.map(f => `
-                  <span class="px-2.5 py-1 rounded bg-[#080706] border border-stone-800 font-mono text-xs text-orange-400">
-                    · ${escapeHtml(f)}
-                  </span>
-                `).join("")}
-              </div>
+              const uvMatch = (p.spectralSignature.uvFluorescence || "").match(/(\d+(?:\.\d+)?%)/);
+              const uvShort = uvMatch
+                ? uvMatch[1]
+                : /failed/i.test(p.spectralSignature.uvFluorescence || "")
+                ? "0%"
+                : "99.2%";
 
-              <!-- Metadata Grid -->
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                <div class="p-3 rounded-lg bg-[#080706] border border-stone-800">
-                  <span class="text-stone-400 font-mono block text-[10px]">EXCISE TAX & STAMP BINDING</span>
-                  <p class="font-semibold text-white mt-0.5">${escapeHtml(p.exciseTaxStatus)}</p>
-                </div>
-                <div class="p-3 rounded-lg bg-[#080706] border border-stone-800">
-                  <span class="text-stone-400 font-mono block text-[10px]">ORIGIN BOTTLING LINE</span>
-                  <p class="font-semibold text-white mt-0.5">${escapeHtml(p.originFacility)}</p>
-                </div>
-                <div class="p-3 rounded-lg bg-[#080706] border border-stone-800">
-                  <span class="text-stone-400 font-mono block text-[10px]">BATCH LOT & PRODUCTION DATE</span>
-                  <p class="font-semibold font-mono text-white mt-0.5">${escapeHtml(p.batchNumber)} • Prod: ${escapeHtml(p.productionDate)}</p>
-                </div>
-                <div class="p-3 rounded-lg bg-[#080706] border border-stone-800">
-                  <span class="text-stone-400 font-mono block text-[10px]">LAST TELEMETRY PING (${p.scanCount}x SCANS)</span>
-                  <p class="font-semibold text-white mt-0.5">${escapeHtml(p.lastScannedLocation)}</p>
-                </div>
-              </div>
+              const exciseShort = isCounterfeit ? "Revoked" : isSuspicious ? "Retired" : "Cleared";
+              const rawHash = p.spectralSignature.ledgerHash || "0x0000";
+              const shortHash = rawHash.length > 13 ? `${rawHash.slice(0, 6)}…${rawHash.slice(-4)}` : rawHash;
 
-              <!-- 6-Point Spectral & Forensic Telemetry Matrix -->
-              <div class="space-y-2.5">
-                <h3 class="text-xs font-mono uppercase tracking-wider text-orange-400 flex items-center gap-1.5">
-                  <i data-lucide="microscope" class="w-4 h-4"></i>
-                  <span>6-Point Cryptographic, Spectral & Closure Telemetry</span>
-                </h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
-                  <div class="p-3 rounded-lg bg-[#080706] border border-stone-800 flex items-start gap-2.5">
-                    <i data-lucide="sun" class="w-4 h-4 text-orange-400 shrink-0 mt-0.5"></i>
-                    <div>
-                      <span class="text-[10px] font-mono text-stone-400 block">365nm UV FLUORESCENCE</span>
-                      <span class="text-stone-200 font-medium">${escapeHtml(p.spectralSignature.uvFluorescence)}</span>
+              const featuredCardBg = isCounterfeit
+                ? "bg-[#4c141d]"
+                : isSuspicious
+                ? "bg-[#472a0e]"
+                : "bg-[#0e4829]";
+
+              return `
+                <!-- Clean Minimal Bottle Header Card -->
+                <div class="rounded-[26px] bg-[#111312] border border-white/[0.05] p-6 sm:p-7">
+                  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div class="space-y-2">
+                      <div class="flex flex-wrap items-center gap-2.5">
+                        ${statusBadgeHTML(p.status, p.verdictBadge)}
+                        <span class="text-xs font-mono text-stone-400">${escapeHtml(p.stampCode)}</span>
+                      </div>
+                      <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">${escapeHtml(p.name)}</h2>
+                      <p class="text-xs sm:text-sm text-stone-400">${escapeHtml(p.brand)} &nbsp;·&nbsp; ${escapeHtml(p.abv)}</p>
+                    </div>
+
+                    <div class="p-2.5 rounded-2xl bg-[#090a09] border border-white/[0.06] self-start sm:self-center shrink-0" title="Unit Cryptographic DataMatrix">
+                      ${generateQrSvg(p.serial, 64, isCounterfeit ? "#f43f5e" : isSuspicious ? "#f59e0b" : "#10b981", "#090a09")}
                     </div>
                   </div>
-                  <div class="p-3 rounded-lg bg-[#080706] border border-stone-800 flex items-start gap-2.5">
-                    <i data-lucide="type" class="w-4 h-4 text-emerald-400 shrink-0 mt-0.5"></i>
-                    <div>
-                      <span class="text-[10px] font-mono text-stone-400 block">MICRO-INTAGLIO TYPOGRAPHY</span>
-                      <span class="text-stone-200 font-medium">${escapeHtml(p.spectralSignature.microText)}</span>
+
+                  <div class="flex flex-wrap items-center gap-2 mt-5 pt-4 border-t border-white/[0.05]">
+                    ${flags.map(f => `
+                      <span class="px-3 py-1 rounded-full bg-white/[0.04] text-[11px] font-mono text-stone-300">
+                        ${escapeHtml(f)}
+                      </span>
+                    `).join("")}
+                    <span class="ml-auto text-xs text-stone-500 hidden sm:inline">Market: <strong class="text-stone-300 font-medium">${escapeHtml(p.intendedMarket)}</strong></span>
+                  </div>
+                </div>
+
+                <!-- Primary 4-Tile Metric Grid (Attachment-2 Style) -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
+                  <!-- Tile 1: Featured Tinted Card -->
+                  <div class="rounded-[26px] ${featuredCardBg} p-5 sm:p-6 flex flex-col justify-between min-h-[154px] transition-all">
+                    <div class="flex items-center justify-between gap-2">
+                      <span class="text-sm font-medium text-white/75">Risk Score</span>
+                      <span class="w-9 h-9 rounded-full bg-black/25 flex items-center justify-center text-white/85 shrink-0">
+                        <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                      </span>
+                    </div>
+                    <div class="pt-6">
+                      <p class="text-3xl sm:text-4xl font-bold text-white tracking-tight leading-none">${p.riskScore}</p>
+                      <p class="text-[11px] text-white/65 mt-2 truncate">${p.confidence}% confidence</p>
                     </div>
                   </div>
-                  <div class="p-3 rounded-lg bg-[#080706] border border-stone-800 flex items-start gap-2.5">
-                    <i data-lucide="lock" class="w-4 h-4 text-amber-400 shrink-0 mt-0.5"></i>
-                    <div>
-                      <span class="text-[10px] font-mono text-stone-400 block">CLOSURE & RETIREMENT STATE</span>
-                      <span class="text-stone-200 font-medium">${escapeHtml(p.spectralSignature.capTorqueSeal)}</span>
+
+                  <!-- Tile 2: Scans -->
+                  <div class="rounded-[26px] bg-[#111312] border border-white/[0.04] p-5 sm:p-6 flex flex-col justify-between min-h-[154px] hover:bg-[#151816] transition-all">
+                    <div class="flex items-center justify-between gap-2">
+                      <span class="text-sm font-medium text-stone-400">Scans</span>
+                      <span class="w-9 h-9 rounded-full bg-white/[0.05] flex items-center justify-center text-stone-300 shrink-0">
+                        <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                      </span>
+                    </div>
+                    <div class="pt-6">
+                      <p class="text-3xl sm:text-4xl font-bold text-white tracking-tight leading-none">${p.scanCount}</p>
+                      <p class="text-[11px] text-stone-500 mt-2 truncate">${escapeHtml(p.lastScannedLocation.split(",")[0])}</p>
                     </div>
                   </div>
-                  <div class="p-3 rounded-lg bg-[#080706] border border-stone-800 flex items-start gap-2.5">
-                    <i data-lucide="flask-conical" class="w-4 h-4 ${isCounterfeit ? "text-rose-400" : "text-emerald-400"} shrink-0 mt-0.5"></i>
-                    <div>
-                      <span class="text-[10px] font-mono text-stone-400 block">METHANOL / DENSITY PROFILE</span>
-                      <span class="text-stone-200 font-medium">${escapeHtml(p.spectralSignature.methanolPpm)}</span>
+
+                  <!-- Tile 3: Closure -->
+                  <div class="rounded-[26px] bg-[#111312] border border-white/[0.04] p-5 sm:p-6 flex flex-col justify-between min-h-[154px] hover:bg-[#151816] transition-all">
+                    <div class="flex items-center justify-between gap-2">
+                      <span class="text-sm font-medium text-stone-400">Closure</span>
+                      <span class="w-9 h-9 rounded-full bg-white/[0.05] flex items-center justify-center text-stone-300 shrink-0">
+                        <i data-lucide="key-round" class="w-4 h-4"></i>
+                      </span>
+                    </div>
+                    <div class="pt-6">
+                      <p class="text-2xl sm:text-3xl font-bold text-white tracking-tight leading-none">${closureShort}</p>
+                      <p class="text-[11px] text-stone-500 mt-2 truncate">Lot ${escapeHtml(p.batchNumber)}</p>
                     </div>
                   </div>
-                  <div class="p-3 rounded-lg bg-[#080706] border border-stone-800 flex items-start gap-2.5">
-                    <i data-lucide="layers" class="w-4 h-4 text-orange-400 shrink-0 mt-0.5"></i>
-                    <div>
-                      <span class="text-[10px] font-mono text-stone-400 block">DIFFRACTIVE KINEGRAM SHIFT</span>
-                      <span class="text-stone-200 font-medium">${escapeHtml(p.spectralSignature.hologramShift)}</span>
+
+                  <!-- Tile 4: Methanol / Assay -->
+                  <div class="rounded-[26px] bg-[#111312] border border-white/[0.04] p-5 sm:p-6 flex flex-col justify-between min-h-[154px] hover:bg-[#151816] transition-all">
+                    <div class="flex items-center justify-between gap-2">
+                      <span class="text-sm font-medium text-stone-400">Assay</span>
+                      <span class="w-9 h-9 rounded-full bg-white/[0.05] flex items-center justify-center text-stone-300 shrink-0">
+                        <i data-lucide="route" class="w-4 h-4"></i>
+                      </span>
                     </div>
-                  </div>
-                  <div class="p-3 rounded-lg bg-[#080706] border border-stone-800 flex items-start gap-2.5">
-                    <i data-lucide="binary" class="w-4 h-4 text-orange-400 shrink-0 mt-0.5"></i>
-                    <div>
-                      <span class="text-[10px] font-mono text-stone-400 block">CRYPTOGRAPHIC LEDGER ANCHOR</span>
-                      <span class="text-stone-200 font-mono">${escapeHtml(p.spectralSignature.ledgerHash)}</span>
+                    <div class="pt-6">
+                      <p class="text-2xl sm:text-3xl font-bold text-white tracking-tight leading-none">${escapeHtml(methanolShort)}</p>
+                      <p class="text-[11px] text-stone-500 mt-2 truncate">Prod ${escapeHtml(p.productionDate)}</p>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-stone-800">
-                <div class="flex flex-wrap items-center gap-2">
-                  <button
-                    type="button"
-                    id="retire-pos-unit-btn"
-                    class="px-3.5 py-2 rounded-lg bg-[#14110f] hover:bg-stone-800 text-amber-300 border border-amber-500/40 text-xs font-mono font-semibold flex items-center gap-1.5 transition-all"
-                  >
-                    <i data-lucide="unlock" class="w-3.5 h-3.5"></i>
-                    <span>POS Retire / Mark Opened</span>
-                  </button>
-                  <button
-                    type="button"
-                    id="download-cert-btn"
-                    class="px-3.5 py-2 rounded-lg bg-[#14110f] hover:bg-stone-800 text-stone-200 border border-stone-700 text-xs font-mono font-semibold flex items-center gap-1.5 transition-all"
-                  >
-                    <i data-lucide="award" class="w-3.5 h-3.5 text-orange-400"></i>
-                    <span>Download Certificate</span>
-                  </button>
-                  <button
-                    type="button"
-                    id="push-unit-to-dooh-btn"
-                    class="px-3.5 py-2 rounded-lg bg-[#14110f] hover:bg-stone-800 text-orange-300 border border-orange-500/35 text-xs font-mono font-semibold flex items-center gap-1.5 transition-all"
-                  >
-                    <i data-lucide="monitor-play" class="w-3.5 h-3.5"></i>
-                    <span>Broadcast to DOOH</span>
-                  </button>
-                  <button
-                    type="button"
-                    id="analyze-unit-ai-btn"
-                    class="px-3.5 py-2 rounded-lg bg-[#14110f] hover:bg-stone-800 text-emerald-300 border border-emerald-500/35 text-xs font-mono font-semibold flex items-center gap-1.5 transition-all"
-                  >
-                    <i data-lucide="brain-circuit" class="w-3.5 h-3.5"></i>
-                    <span>Analyze in AI Cortex</span>
-                  </button>
+                <!-- Secondary 3-Tile Telemetry Row (Attachment-2 Style) -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                  <div class="rounded-[26px] bg-[#111312] border border-white/[0.04] p-5 flex flex-col justify-between min-h-[136px] hover:bg-[#151816] transition-all">
+                    <div class="flex items-center justify-between gap-2">
+                      <span class="text-sm font-medium text-stone-400">Excise Tax</span>
+                      <span class="w-9 h-9 rounded-full bg-white/[0.05] flex items-center justify-center text-stone-300 shrink-0">
+                        <i data-lucide="shield-check" class="w-4 h-4"></i>
+                      </span>
+                    </div>
+                    <div class="pt-5">
+                      <p class="text-2xl font-bold text-white tracking-tight leading-none">${exciseShort}</p>
+                      <p class="text-[11px] text-stone-500 mt-2 truncate">${escapeHtml(p.originFacility.split("•")[0].trim())}</p>
+                    </div>
+                  </div>
+
+                  <div class="rounded-[26px] bg-[#111312] border border-white/[0.04] p-5 flex flex-col justify-between min-h-[136px] hover:bg-[#151816] transition-all">
+                    <div class="flex items-center justify-between gap-2">
+                      <span class="text-sm font-medium text-stone-400">UV Taggant</span>
+                      <span class="w-9 h-9 rounded-full bg-white/[0.05] flex items-center justify-center text-stone-300 shrink-0">
+                        <i data-lucide="sun" class="w-4 h-4"></i>
+                      </span>
+                    </div>
+                    <div class="pt-5">
+                      <p class="text-2xl font-bold text-white tracking-tight leading-none">${escapeHtml(uvShort)}</p>
+                      <p class="text-[11px] text-stone-500 mt-2 truncate">${escapeHtml(p.spectralSignature.microText)}</p>
+                    </div>
+                  </div>
+
+                  <div class="rounded-[26px] bg-[#111312] border border-white/[0.04] p-5 flex flex-col justify-between min-h-[136px] hover:bg-[#151816] transition-all">
+                    <div class="flex items-center justify-between gap-2">
+                      <span class="text-sm font-medium text-stone-400">Ledger Anchor</span>
+                      <span class="w-9 h-9 rounded-full bg-white/[0.05] flex items-center justify-center text-stone-300 shrink-0">
+                        <i data-lucide="binary" class="w-4 h-4"></i>
+                      </span>
+                    </div>
+                    <div class="pt-5">
+                      <p class="text-xl font-bold font-mono text-white tracking-tight leading-none">${escapeHtml(shortHash)}</p>
+                      <p class="text-[11px] text-stone-500 mt-2 truncate">${escapeHtml(p.spectralSignature.hologramShift)}</p>
+                    </div>
+                  </div>
                 </div>
-                <button
-                  type="button"
-                  id="flag-current-product-btn"
-                  class="px-4 py-2 rounded-lg bg-orange-500 hover:bg-orange-400 text-black text-xs font-bold flex items-center gap-1.5 transition-all"
-                >
-                  <i data-lucide="siren" class="w-3.5 h-3.5"></i>
-                  <span>Flag Unit to Aegis Enforcement</span>
-                </button>
-              </div>
-            </div>
 
-            <!-- Supply Chain Custody Timeline -->
-            <div class="rounded-xl border border-stone-800 bg-[#110e0c]/90 p-6 space-y-4">
+                <!-- Optional Expandable Raw Forensic Detail & Clean Action Bar -->
+                <div class="rounded-[26px] bg-[#111312] border border-white/[0.04] p-5 space-y-4">
+                  <details class="group">
+                    <summary class="flex items-center justify-between cursor-pointer list-none text-xs font-medium text-stone-400 hover:text-white transition-colors">
+                      <span class="flex items-center gap-2">
+                        <i data-lucide="microscope" class="w-4 h-4 text-orange-400"></i>
+                        <span>View full 6-point raw spectral &amp; excise strings</span>
+                      </span>
+                      <span class="text-[11px] font-mono text-stone-500 group-open:rotate-180 transition-transform">▾</span>
+                    </summary>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-4 text-xs text-stone-300">
+                      <div class="p-3 rounded-2xl bg-[#0a0b0a]"><span class="text-stone-500 block text-[11px]">Excise Status</span>${escapeHtml(p.exciseTaxStatus)}</div>
+                      <div class="p-3 rounded-2xl bg-[#0a0b0a]"><span class="text-stone-500 block text-[11px]">365nm UV Assay</span>${escapeHtml(p.spectralSignature.uvFluorescence)}</div>
+                      <div class="p-3 rounded-2xl bg-[#0a0b0a]"><span class="text-stone-500 block text-[11px]">Closure State</span>${escapeHtml(p.spectralSignature.capTorqueSeal)}</div>
+                      <div class="p-3 rounded-2xl bg-[#0a0b0a]"><span class="text-stone-500 block text-[11px]">Methanol Profile</span>${escapeHtml(p.spectralSignature.methanolPpm)}</div>
+                    </div>
+                  </details>
+
+                  <div class="flex flex-wrap items-center justify-between gap-2.5 pt-3 border-t border-white/[0.05]">
+                    <div class="flex flex-wrap items-center gap-2">
+                      <button
+                        type="button"
+                        id="retire-pos-unit-btn"
+                        class="px-3.5 py-2 rounded-full bg-white/[0.05] hover:bg-white/[0.1] text-amber-300 text-xs font-medium flex items-center gap-1.5 transition-all"
+                      >
+                        <i data-lucide="unlock" class="w-3.5 h-3.5"></i>
+                        <span>POS Retire</span>
+                      </button>
+                      <button
+                        type="button"
+                        id="download-cert-btn"
+                        class="px-3.5 py-2 rounded-full bg-white/[0.05] hover:bg-white/[0.1] text-stone-200 text-xs font-medium flex items-center gap-1.5 transition-all"
+                      >
+                        <i data-lucide="award" class="w-3.5 h-3.5 text-orange-400"></i>
+                        <span>Certificate</span>
+                      </button>
+                      <button
+                        type="button"
+                        id="push-unit-to-dooh-btn"
+                        class="px-3.5 py-2 rounded-full bg-white/[0.05] hover:bg-white/[0.1] text-orange-300 text-xs font-medium flex items-center gap-1.5 transition-all"
+                      >
+                        <i data-lucide="monitor-play" class="w-3.5 h-3.5"></i>
+                        <span>DOOH Sync</span>
+                      </button>
+                      <button
+                        type="button"
+                        id="analyze-unit-ai-btn"
+                        class="px-3.5 py-2 rounded-full bg-white/[0.05] hover:bg-white/[0.1] text-emerald-300 text-xs font-medium flex items-center gap-1.5 transition-all"
+                      >
+                        <i data-lucide="brain-circuit" class="w-3.5 h-3.5"></i>
+                        <span>AI Cortex</span>
+                      </button>
+                    </div>
+                    <button
+                      type="button"
+                      id="flag-current-product-btn"
+                      class="px-4 py-2 rounded-full bg-[#f97316] hover:bg-[#fb923c] text-black text-xs font-bold flex items-center gap-1.5 transition-all"
+                    >
+                      <i data-lucide="siren" class="w-3.5 h-3.5"></i>
+                      <span>Flag Unit</span>
+                    </button>
+                  </div>
+                </div>
+              `;
+            })()}
+
+            <!-- Clean Rounded Supply Chain Custody Ledger -->
+            <div class="rounded-[26px] bg-[#111312] border border-white/[0.04] p-6 space-y-4">
               <div class="flex items-center justify-between">
                 <div>
-                  <h3 class="text-base font-bold text-white">Unit Identity & Custody Ledger</h3>
-                  <p class="text-xs text-stone-400">Every scan, shipment, and consumer check bound to this bottle</p>
+                  <h3 class="text-base font-bold text-white">Custody Ledger</h3>
+                  <p class="text-xs text-stone-400">Cryptographic scan &amp; shipment events bound to this bottle</p>
                 </div>
-                <span class="text-xs font-mono text-orange-400">${p.supplyChain.length} EVENTS</span>
+                <span class="px-3 py-1 rounded-full bg-white/[0.05] text-xs font-mono text-stone-300">${p.supplyChain.length} events</span>
               </div>
 
-              <div class="space-y-3">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 ${p.supplyChain.map((node, idx) => `
-                  <div class="flex items-start gap-3.5 p-3.5 rounded-lg border ${
+                  <div class="rounded-[22px] p-4 flex flex-col justify-between gap-4 ${
                     node.verified
-                      ? "bg-[#080706] border-stone-800"
-                      : "bg-rose-950/25 border-rose-500/40"
+                      ? "bg-[#0a0b0a] border border-white/[0.04]"
+                      : "bg-[#290d13] border border-rose-500/25"
                   }">
-                    <div class="w-7 h-7 rounded flex items-center justify-center font-mono text-xs font-bold shrink-0 ${
-                      node.verified
-                        ? "bg-orange-500/20 text-orange-300 border border-orange-500/30"
-                        : "bg-rose-500/20 text-rose-300 border border-rose-500/40"
-                    }">
-                      ${idx + 1}
+                    <div class="flex items-center justify-between gap-2">
+                      <span class="text-xs text-stone-400 truncate">${escapeHtml(node.location)}</span>
+                      <span class="w-7 h-7 rounded-full ${
+                        node.verified ? "bg-white/[0.06] text-stone-300" : "bg-rose-500/20 text-rose-300"
+                      } flex items-center justify-center font-mono text-xs font-bold shrink-0">
+                        ${idx + 1}
+                      </span>
                     </div>
-                    <div class="flex-1 min-w-0">
-                      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-                        <p class="text-xs sm:text-sm font-bold text-white">${escapeHtml(node.step)}</p>
-                        <span class="text-[11px] font-mono text-stone-400">${escapeHtml(node.timestamp)}</span>
-                      </div>
-                      <p class="text-xs text-stone-300 mt-0.5">${escapeHtml(node.actor)} — <span class="text-stone-400">${escapeHtml(node.location)}</span></p>
-                      <p class="text-[11px] font-mono ${node.verified ? "text-orange-400" : "text-rose-400"} mt-1">
-                        Hash: ${escapeHtml(node.hash)}
-                      </p>
+                    <div>
+                      <p class="text-sm font-bold text-white leading-snug">${escapeHtml(node.step)}</p>
+                      <p class="text-[11px] text-stone-500 mt-1 truncate">${escapeHtml(node.actor)} · ${escapeHtml(node.timestamp)}</p>
                     </div>
                   </div>
                 `).join("")}
