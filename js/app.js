@@ -2481,179 +2481,227 @@
     const isEmergency = activeBoard.activeMode === "EMERGENCY_ALERT";
     const isWarning = activeBoard.activeMode === "REFILL_WARNING";
 
+    const compactReach = str => {
+      const n = Number(String(str || "0").replace(/[^0-9.]/g, ""));
+      if (!n) return str;
+      return n >= 1000 ? `${+(n / 1000).toFixed(1)}K` : String(n);
+    };
+
+    const highRiskCount = boards.filter(b => b.localRiskScore >= 70).length;
+    const featuredBg = isEmergency
+      ? "bg-[#4c141d]"
+      : isWarning
+      ? "bg-[#472a0e]"
+      : "bg-[#0e4829]";
+
+    const modeShortLabel = mode =>
+      mode === "EMERGENCY_ALERT" ? "Emergency" : mode === "REFILL_WARNING" ? "Refill Warn" : "Brand Trust";
+
     return `
       <div class="view-animate space-y-8">
-        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-stone-800 pb-5">
+        <!-- Clean Header Bar -->
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-white/[0.06] pb-5">
           <div>
             <div class="flex items-center gap-2 text-xs font-mono text-orange-500 uppercase tracking-widest">
               <i data-lucide="monitor-play" class="w-4 h-4"></i>
-              <span>VANBRANSA DIGITAL OUT-OF-HOME × AEGIS TELEMETRY ENGINE</span>
+              <span>VANBRANSA DOOH · AEGIS TELEMETRY</span>
             </div>
-            <h1 class="text-2xl sm:text-3xl font-extrabold text-white mt-1">Smart Roadside Billboard Network &amp; Risk Triggers</h1>
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-white mt-1">Smart Roadside Billboard Network</h1>
           </div>
 
           <div class="flex flex-wrap items-center gap-2.5 self-start">
             <button
               type="button"
               id="toggle-dooh-autosync-btn"
-              class="px-3.5 py-2 rounded-lg border text-xs font-mono font-semibold flex items-center gap-2 transition-all ${
+              class="px-4 py-2.5 rounded-full text-xs font-medium flex items-center gap-2 transition-all ${
                 state.doohAutoSync
-                  ? "bg-emerald-500/15 border-emerald-500/40 text-emerald-300"
-                  : "bg-[#14110f] border-stone-700 text-stone-300"
+                  ? "bg-[#0e4829] text-white"
+                  : "bg-[#111312] border border-white/[0.06] text-stone-300 hover:bg-white/[0.06]"
               }"
             >
-              <span class="w-2 h-2 rounded-full ${state.doohAutoSync ? "bg-emerald-400 animate-pulse" : "bg-stone-500"}"></span>
-              <span>Auto-Trigger on County Risk &gt; 70: ${state.doohAutoSync ? "ENABLED" : "MANUAL"}</span>
+              <span class="w-2 h-2 rounded-full ${state.doohAutoSync ? "bg-emerald-300 animate-pulse" : "bg-stone-500"}"></span>
+              <span>Auto-Trigger: ${state.doohAutoSync ? "On" : "Manual"}</span>
             </button>
 
             <button
               type="button"
               id="broadcast-all-dooh-btn"
-              class="px-4 py-2 rounded-lg bg-[#f97316] hover:bg-[#fb923c] text-black font-bold text-xs flex items-center gap-2 shadow-lg shadow-orange-500/20 transition-all"
+              class="px-5 py-2.5 rounded-full bg-[#f97316] hover:bg-[#fb923c] text-black font-bold text-xs flex items-center gap-2 transition-all"
             >
               <i data-lucide="radio-tower" class="w-4 h-4"></i>
-              <span>Broadcast Emergency Alert to All High-Risk Screens</span>
+              <span>Broadcast Alert</span>
             </button>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-7">
-          <!-- Left: Live 16:9 Roadside Digital Billboard Simulator -->
-          <div class="lg:col-span-7 space-y-4">
-            <div class="flex items-center justify-between text-xs font-mono text-stone-400">
-              <span>LIVE ROADSIDE LED CANVAS PREVIEW • ${escapeHtml(activeBoard.screenId)} (${escapeHtml(activeBoard.format)})</span>
-              <span class="text-orange-400">Synced ${escapeHtml(activeBoard.lastSynced)}</span>
+        <!-- 4-Card Network Telemetry Strip (Exact Attachment-2 Design) -->
+        <section class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="rounded-[28px] ${featuredBg} p-6 flex flex-col justify-between min-h-[164px] transition-all">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-sm font-medium text-white/80">Local Risk</span>
+              <span class="w-9 h-9 rounded-full bg-black/25 flex items-center justify-center text-white/90 shrink-0">
+                <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+              </span>
             </div>
-
-            <!-- Simulated Physical VANBRANSA Digital Billboard Frame -->
-            <div class="rounded-2xl p-3 bg-gradient-to-b from-stone-800 via-stone-900 to-black border-2 border-stone-700 shadow-2xl">
-              <div class="relative rounded-xl overflow-hidden border ${
-                isEmergency
-                  ? "border-rose-500/70 bg-gradient-to-br from-[#1f090d] via-[#0b0908] to-[#1a0f08]"
-                  : isWarning
-                  ? "border-amber-500/70 bg-gradient-to-br from-[#1c1307] via-[#0b0908] to-[#140e09]"
-                  : "border-emerald-500/50 bg-gradient-to-br from-[#071912] via-[#0b0908] to-[#120f0d]"
-              } p-6 sm:p-8 min-h-[300px] flex flex-col justify-between">
-                <!-- Top Billboard Bar -->
-                <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
-                  <div class="flex items-center gap-3">
-                    <img src="assets/vanbransa-logo.png" alt="VANBRANSA" class="h-8 w-auto object-contain bg-black px-2.5 py-1 rounded border border-stone-700" />
-                    <div>
-                      <span class="text-[10px] font-mono uppercase tracking-[0.2em] text-orange-400 block">PUBLIC SAFETY &amp; EXCISE TELEMETRY</span>
-                      <span class="text-xs font-bold text-white">${escapeHtml(activeBoard.name)}</span>
-                    </div>
-                  </div>
-                  <div class="px-3 py-1 rounded font-mono text-xs font-bold ${
-                    isEmergency
-                      ? "bg-rose-500 text-black animate-pulse"
-                      : isWarning
-                      ? "bg-amber-400 text-black"
-                      : "bg-emerald-400 text-black"
-                  }">
-                    ${escapeHtml(activeBoard.activeMode.replace(/_/g, " "))} • LOCAL RISK ${activeBoard.localRiskScore}
-                  </div>
-                </div>
-
-                <!-- Center Billboard Message + QR Code -->
-                <div class="grid grid-cols-1 sm:grid-cols-12 gap-5 items-center my-4">
-                  <div class="sm:col-span-8 space-y-2.5">
-                    <h2 class="text-xl sm:text-2xl font-black tracking-tight text-white uppercase leading-tight">
-                      ${escapeHtml(activeBoard.headline)}
-                    </h2>
-                    <p class="text-xs sm:text-sm text-stone-200 leading-relaxed">
-                      ${escapeHtml(activeBoard.subheadline)}
-                    </p>
-                    <div class="pt-1">
-                      <button
-                        type="button"
-                        data-dooh-scan-serial="${escapeHtml(activeBoard.targetSerial)}"
-                        class="px-4 py-2 rounded-lg bg-[#f97316] hover:bg-[#fb923c] text-black font-extrabold text-xs font-mono uppercase tracking-wider inline-flex items-center gap-2 shadow-lg"
-                      >
-                        <i data-lucide="smartphone" class="w-4 h-4"></i>
-                        <span>${escapeHtml(activeBoard.ctaText)}</span>
-                      </button>
-                    </div>
-                  </div>
-
-                  <div class="sm:col-span-4 flex flex-col items-center justify-center p-3 rounded-xl bg-black/90 border border-stone-700">
-                    ${generateQrSvg(activeBoard.targetSerial, 108, isEmergency ? "#f43f5e" : isWarning ? "#f59e0b" : "#10b981", "#080706")}
-                    <span class="text-[10px] font-mono text-stone-300 mt-1.5">SCAN WITH PHONE CAMERA</span>
-                    <span class="text-[9px] font-mono text-orange-400">${escapeHtml(activeBoard.targetSerial)}</span>
-                  </div>
-                </div>
-
-                <!-- Bottom Billboard Frame Strip -->
-                <div class="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-white/10 text-[10px] font-mono text-stone-400">
-                  <span>VANBRANSA DIGITAL OUT-OF-HOME • ${escapeHtml(activeBoard.county.toUpperCase())}</span>
-                  <span>IMPRESSIONS: <strong class="text-white">${escapeHtml(activeBoard.dailyImpressions)} / DAY</strong></span>
-                  <span>GPS: ${escapeHtml(activeBoard.coordinates)}</span>
-                </div>
-              </div>
-              <!-- Physical Gantry Pillar Bar -->
-              <div class="mt-2 flex items-center justify-between px-4 py-1 bg-black rounded text-[10px] font-mono text-stone-400">
-                <span>VANBRANSA SMART GANTRY CONTROLLER v4.6</span>
-                <span class="text-emerald-400">● 4G LTE / STARLINK TELEMETRY LINKED</span>
-              </div>
-            </div>
-
-            <!-- Creative Mode Switcher for Selected Billboard -->
-            <div class="p-4 rounded-xl bg-[#110e0c] border border-stone-800 flex flex-wrap items-center justify-between gap-3">
-              <span class="text-xs font-mono text-stone-300">Override Active Screen Creative Mode:</span>
-              <div class="flex flex-wrap gap-2">
-                <button type="button" data-set-dooh-mode="EMERGENCY_ALERT" class="px-3 py-1.5 rounded text-xs font-mono font-bold border transition-all ${
-                  activeBoard.activeMode === "EMERGENCY_ALERT" ? "bg-rose-500/20 border-rose-500 text-rose-300" : "bg-[#080706] border-stone-800 text-stone-400"
-                }">Emergency Counterfeit Alert</button>
-                <button type="button" data-set-dooh-mode="REFILL_WARNING" class="px-3 py-1.5 rounded text-xs font-mono font-bold border transition-all ${
-                  activeBoard.activeMode === "REFILL_WARNING" ? "bg-amber-500/20 border-amber-500 text-amber-300" : "bg-[#080706] border-stone-800 text-stone-400"
-                }">Hospitality Refill Warning</button>
-                <button type="button" data-set-dooh-mode="BRAND_TRUST" class="px-3 py-1.5 rounded text-xs font-mono font-bold border transition-all ${
-                  activeBoard.activeMode === "BRAND_TRUST" ? "bg-emerald-500/20 border-emerald-500 text-emerald-300" : "bg-[#080706] border-stone-800 text-stone-400"
-                }">Standard Brand Trust</button>
-              </div>
+            <div class="pt-7">
+              <p class="text-3xl sm:text-4xl font-bold text-white tracking-tight leading-none">${activeBoard.localRiskScore}</p>
+              <p class="text-xs text-white/70 mt-2 truncate">${escapeHtml(activeBoard.county)} · ${modeShortLabel(activeBoard.activeMode)}</p>
             </div>
           </div>
 
-          <!-- Right: National Billboard Fleet Inventory -->
-          <div class="lg:col-span-5 rounded-xl border border-stone-800 bg-[#110e0c]/95 p-6 space-y-4">
-            <div class="flex items-center justify-between">
-              <div>
-                <h3 class="text-base font-bold text-white">VANBRANSA Smart Screen Inventory</h3>
-                <p class="text-xs text-stone-400">Select any roadside LED screen to inspect or override creative</p>
-              </div>
-              <span class="text-xs font-mono text-orange-400">${boards.length} ACTIVE</span>
+          <div class="rounded-[28px] bg-[#111312] border border-white/[0.04] p-6 flex flex-col justify-between min-h-[164px]">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-sm font-medium text-stone-400">Daily Reach</span>
+              <span class="w-9 h-9 rounded-full bg-white/[0.05] flex items-center justify-center text-stone-300 shrink-0">
+                <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+              </span>
             </div>
+            <div class="pt-7">
+              <p class="text-3xl sm:text-4xl font-bold text-white tracking-tight leading-none">${escapeHtml(compactReach(activeBoard.dailyImpressions))}</p>
+              <p class="text-xs text-stone-500 mt-2 truncate">${escapeHtml(activeBoard.screenId)} impressions/day</p>
+            </div>
+          </div>
 
-            <div class="space-y-2.5">
-              ${boards.map(b => `
+          <div class="rounded-[28px] bg-[#111312] border border-white/[0.04] p-6 flex flex-col justify-between min-h-[164px]">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-sm font-medium text-stone-400">Active Fleet</span>
+              <span class="w-9 h-9 rounded-full bg-white/[0.05] flex items-center justify-center text-stone-300 shrink-0">
+                <i data-lucide="key-round" class="w-4 h-4"></i>
+              </span>
+            </div>
+            <div class="pt-7">
+              <p class="text-3xl sm:text-4xl font-bold text-white tracking-tight leading-none">${boards.length}</p>
+              <p class="text-xs text-stone-500 mt-2 truncate">${highRiskCount} high-risk counties</p>
+            </div>
+          </div>
+
+          <div class="rounded-[28px] bg-[#111312] border border-white/[0.04] p-6 flex flex-col justify-between min-h-[164px]">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-sm font-medium text-stone-400">Uplink</span>
+              <span class="w-9 h-9 rounded-full bg-white/[0.05] flex items-center justify-center text-stone-300 shrink-0">
+                <i data-lucide="route" class="w-4 h-4"></i>
+              </span>
+            </div>
+            <div class="pt-7">
+              <p class="text-2xl sm:text-3xl font-bold text-white tracking-tight leading-none">Starlink</p>
+              <p class="text-xs text-stone-500 mt-2 truncate">Synced ${escapeHtml(activeBoard.lastSynced)}</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Smart Screen Inventory Selector Row (Attachment-2 Rounded Tiles) -->
+        <section class="space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-medium text-stone-400">Select Roadside Smart Screen</span>
+            <span class="text-xs font-mono text-stone-500">${escapeHtml(activeBoard.format)}</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
+            ${boards.map(b => {
+              const isSelected = b.screenId === activeBoard.screenId;
+              const selectedBg =
+                b.activeMode === "EMERGENCY_ALERT"
+                  ? "bg-[#4c141d]"
+                  : b.activeMode === "REFILL_WARNING"
+                  ? "bg-[#472a0e]"
+                  : "bg-[#0e4829]";
+              const shortLoc = b.name.split(" ")[0];
+              return `
                 <button
                   type="button"
                   data-select-billboard="${escapeHtml(b.screenId)}"
-                  class="w-full text-left p-4 rounded-xl border transition-all space-y-2 ${
-                    b.screenId === activeBoard.screenId
-                      ? "bg-[#1a1410] border-orange-500/70 shadow-lg shadow-orange-500/10"
-                      : "bg-[#080706] border-stone-800 hover:border-stone-700"
+                  class="text-left rounded-[26px] p-5 flex flex-col justify-between min-h-[152px] transition-all cursor-pointer ${
+                    isSelected
+                      ? `${selectedBg} shadow-xl`
+                      : "bg-[#111312] border border-white/[0.04] hover:bg-[#161918]"
                   }"
                 >
-                  <div class="flex items-center justify-between text-xs font-mono">
-                    <span class="text-orange-400 font-bold">${escapeHtml(b.screenId)} • ${escapeHtml(b.county)}</span>
-                    <span class="px-2 py-0.5 rounded text-[10px] font-bold ${
-                      b.activeMode === "EMERGENCY_ALERT"
-                        ? "bg-rose-500/20 text-rose-300 border border-rose-500/30"
-                        : b.activeMode === "REFILL_WARNING"
-                        ? "bg-amber-500/20 text-amber-300 border border-amber-500/30"
-                        : "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
-                    }">${escapeHtml(b.activeMode.replace(/_/g, " "))}</span>
+                  <div class="flex items-center justify-between gap-2 w-full">
+                    <span class="text-sm font-medium ${isSelected ? "text-white/85" : "text-stone-400"} truncate">${escapeHtml(shortLoc)}</span>
+                    <span class="w-8 h-8 rounded-full ${
+                      isSelected ? "bg-black/25 text-white" : "bg-white/[0.05] text-stone-300"
+                    } flex items-center justify-center shrink-0">
+                      <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                    </span>
                   </div>
-                  <p class="text-sm font-bold text-white">${escapeHtml(b.name)}</p>
-                  <div class="flex items-center justify-between text-[11px] font-mono text-stone-400">
-                    <span>Reach: <strong class="text-stone-200">${escapeHtml(b.dailyImpressions)}/day</strong></span>
-                    <span>Local Risk: <strong class="${b.localRiskScore >= 70 ? "text-rose-400" : "text-emerald-400"}">RISK ${b.localRiskScore}</strong></span>
+                  <div class="pt-6">
+                    <p class="text-2xl sm:text-3xl font-bold text-white tracking-tight leading-none">${escapeHtml(compactReach(b.dailyImpressions))}</p>
+                    <p class="text-[11px] ${isSelected ? "text-white/70" : "text-stone-500"} mt-2 truncate">${escapeHtml(b.screenId)} · Risk ${b.localRiskScore}</p>
                   </div>
                 </button>
-              `).join("")}
+              `;
+            }).join("")}
+          </div>
+        </section>
+
+        <!-- Clean Decluttered 16:9 Roadside LED Canvas & Creative Mode Pills -->
+        <section class="rounded-[28px] bg-[#111312] border border-white/[0.04] p-6 sm:p-8 space-y-6">
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-3.5">
+              <img src="assets/vanbransa-logo.png" alt="VANBRANSA" class="h-8 w-auto object-contain bg-black px-2.5 py-1 rounded-xl border border-white/[0.08]" />
+              <div>
+                <h2 class="text-base sm:text-lg font-bold text-white">${escapeHtml(activeBoard.name)}</h2>
+                <p class="text-xs text-stone-400">GPS ${escapeHtml(activeBoard.coordinates)} · ${escapeHtml(activeBoard.county)}</p>
+              </div>
+            </div>
+
+            <!-- Clean Pill Creative Mode Switcher -->
+            <div class="flex flex-wrap items-center gap-2">
+              <button type="button" data-set-dooh-mode="EMERGENCY_ALERT" class="px-4 py-2 rounded-full text-xs font-medium transition-all ${
+                activeBoard.activeMode === "EMERGENCY_ALERT"
+                  ? "bg-[#4c141d] text-rose-100 font-semibold"
+                  : "bg-[#0a0c0b] text-stone-400 hover:text-white"
+              }">Emergency Alert</button>
+              <button type="button" data-set-dooh-mode="REFILL_WARNING" class="px-4 py-2 rounded-full text-xs font-medium transition-all ${
+                activeBoard.activeMode === "REFILL_WARNING"
+                  ? "bg-[#472a0e] text-amber-100 font-semibold"
+                  : "bg-[#0a0c0b] text-stone-400 hover:text-white"
+              }">Refill Warning</button>
+              <button type="button" data-set-dooh-mode="BRAND_TRUST" class="px-4 py-2 rounded-full text-xs font-medium transition-all ${
+                activeBoard.activeMode === "BRAND_TRUST"
+                  ? "bg-[#0e4829] text-emerald-100 font-semibold"
+                  : "bg-[#0a0c0b] text-stone-400 hover:text-white"
+              }">Brand Trust</button>
             </div>
           </div>
-        </div>
+
+          <!-- Sleek Live LED Display Surface -->
+          <div class="rounded-[24px] p-6 sm:p-9 ${
+            isEmergency
+              ? "bg-gradient-to-br from-[#2d0c12] via-[#0d0e0d] to-[#14100e]"
+              : isWarning
+              ? "bg-gradient-to-br from-[#2b1a09] via-[#0d0e0d] to-[#14100e]"
+              : "bg-gradient-to-br from-[#092918] via-[#0d0e0d] to-[#101312]"
+          } border border-white/[0.06] grid grid-cols-1 lg:grid-cols-12 gap-7 items-center">
+            <div class="lg:col-span-8 space-y-4">
+              <span class="px-3 py-1 rounded-full bg-white/[0.07] text-xs font-mono text-white/85 inline-block">
+                ${escapeHtml(modeShortLabel(activeBoard.activeMode).toUpperCase())} · RISK ${activeBoard.localRiskScore}
+              </span>
+              <h3 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white leading-tight">
+                ${escapeHtml(activeBoard.headline)}
+              </h3>
+              <p class="text-sm text-stone-300 leading-relaxed max-w-2xl">
+                ${escapeHtml(activeBoard.subheadline)}
+              </p>
+              <div class="pt-1">
+                <button
+                  type="button"
+                  data-dooh-scan-serial="${escapeHtml(activeBoard.targetSerial)}"
+                  class="px-5 py-3 rounded-full bg-[#f97316] hover:bg-[#fb923c] text-black font-bold text-xs inline-flex items-center gap-2 shadow-lg transition-all"
+                >
+                  <i data-lucide="smartphone" class="w-4 h-4"></i>
+                  <span>${escapeHtml(activeBoard.ctaText)}</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="lg:col-span-4 flex flex-col items-center justify-center p-5 rounded-[22px] bg-[#090a09]/90 border border-white/[0.06]">
+              ${generateQrSvg(activeBoard.targetSerial, 116, isEmergency ? "#f43f5e" : isWarning ? "#f59e0b" : "#10b981", "#090a09")}
+              <span class="text-xs font-medium text-stone-300 mt-3">Scan with Phone Camera</span>
+              <span class="text-[11px] font-mono text-stone-500 mt-0.5">${escapeHtml(activeBoard.targetSerial)}</span>
+            </div>
+          </div>
+        </section>
       </div>
     `;
   }
