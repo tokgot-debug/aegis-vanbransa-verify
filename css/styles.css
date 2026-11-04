@@ -223,3 +223,199 @@ dialog::backdrop {
   background: rgba(8, 7, 6, 0.85);
   backdrop-filter: blur(6px);
 }
+
+/* ============================================================================
+   FUTURISTIC 3D ROTATING CRYSTAL DECANTER SHOWCASE (LANDING HERO)
+   ============================================================================ */
+.aegis-holo-stage {
+  perspective: 1400px;
+  transform-style: preserve-3d;
+}
+
+@keyframes aegisDecanterFloat {
+  0%, 100% {
+    transform: translateY(-7px);
+  }
+  50% {
+    transform: translateY(8px);
+  }
+}
+
+@keyframes aegisDecanterSpin360 {
+  0% {
+    transform: rotateX(3deg) rotateY(0deg);
+  }
+  50% {
+    transform: rotateX(-2deg) rotateY(180deg);
+  }
+  100% {
+    transform: rotateX(3deg) rotateY(360deg);
+  }
+}
+
+.aegis-decanter-levitate {
+  transform-style: preserve-3d;
+  animation: aegisDecanterFloat 5.4s ease-in-out infinite;
+}
+
+.aegis-decanter-rotor {
+  position: relative;
+  width: 248px;
+  height: 372px;
+  transform-style: preserve-3d;
+  animation: aegisDecanterSpin360 15s linear infinite;
+  will-change: transform;
+}
+
+.aegis-holo-stage:hover .aegis-decanter-rotor {
+  animation-duration: 24s;
+}
+
+.aegis-decanter-slice {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+  transform: translateZ(var(--slice-z, 0px));
+}
+
+.aegis-decanter-slice.core-glow {
+  filter: brightness(1.28) saturate(1.35) drop-shadow(0 0 22px rgba(249, 115, 22, 0.55));
+  opacity: 0.78;
+}
+
+.aegis-decanter-slice.outer-face {
+  filter: contrast(1.06) saturate(1.12) drop-shadow(0 18px 34px rgba(0, 0, 0, 0.85))
+    drop-shadow(0 0 18px rgba(245, 158, 11, 0.28));
+}
+
+/* 3D Tilted Cyber-Amber Orbital Rings */
+@keyframes orbitSpinCw {
+  from {
+    transform: translate(-50%, -50%) rotateX(75deg) rotateY(-8deg) rotateZ(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotateX(75deg) rotateY(-8deg) rotateZ(360deg);
+  }
+}
+
+@keyframes orbitSpinCcw {
+  from {
+    transform: translate(-50%, -50%) rotateX(75deg) rotateY(9deg) rotateZ(360deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotateX(75deg) rotateY(9deg) rotateZ(0deg);
+  }
+}
+
+.aegis-orbit-ring-outer {
+  position: absolute;
+  left: 50%;
+  top: 58%;
+  width: 356px;
+  height: 356px;
+  border-radius: 9999px;
+  border: 1px dashed rgba(249, 115, 22, 0.42);
+  box-shadow: 0 0 30px rgba(249, 115, 22, 0.14), inset 0 0 24px rgba(249, 115, 22, 0.08);
+  animation: orbitSpinCw 18s linear infinite;
+  pointer-events: none;
+}
+
+.aegis-orbit-ring-outer::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: #fb923c;
+  box-shadow: 0 0 14px 4px rgba(249, 115, 22, 0.95);
+}
+
+.aegis-orbit-ring-inner {
+  position: absolute;
+  left: 50%;
+  top: 58%;
+  width: 268px;
+  height: 268px;
+  border-radius: 9999px;
+  border: 1.5px solid rgba(251, 191, 36, 0.32);
+  animation: orbitSpinCcw 12s linear infinite;
+  pointer-events: none;
+}
+
+.aegis-orbit-ring-inner::before {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: #34d399;
+  box-shadow: 0 0 12px 3px rgba(16, 185, 129, 0.9);
+}
+
+.aegis-orbit-ring-collar {
+  position: absolute;
+  left: 50%;
+  top: 29%;
+  width: 156px;
+  height: 156px;
+  border-radius: 9999px;
+  border: 1px dashed rgba(52, 211, 153, 0.45);
+  animation: orbitSpinCw 9s linear infinite;
+  pointer-events: none;
+}
+
+/* Vertical Quantum Laser Scan Halo */
+@keyframes holoBeamVertical {
+  0%, 100% {
+    top: 13%;
+    opacity: 0.45;
+    transform: translateX(-50%) scaleX(0.68);
+  }
+  50% {
+    top: 81%;
+    opacity: 0.95;
+    transform: translateX(-50%) scaleX(1.05);
+  }
+}
+
+.aegis-holo-scan-ring {
+  position: absolute;
+  left: 50%;
+  width: 240px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, #f97316 25%, #fde68a 50%, #f97316 75%, transparent 100%);
+  box-shadow: 0 0 18px 3px rgba(249, 115, 22, 0.85), 0 0 36px 8px rgba(245, 158, 11, 0.35);
+  animation: holoBeamVertical 4.2s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 25;
+}
+
+/* Holographic Base Emitter Pedestal */
+.aegis-pedestal-emitter {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%) rotateX(76deg);
+  width: 240px;
+  height: 240px;
+  border-radius: 9999px;
+  background: radial-gradient(
+    circle,
+    rgba(249, 115, 22, 0.48) 0%,
+    rgba(245, 158, 11, 0.2) 38%,
+    rgba(16, 185, 129, 0.08) 62%,
+    transparent 74%
+  );
+  border: 1px solid rgba(249, 115, 22, 0.45);
+  box-shadow: 0 0 50px 10px rgba(249, 115, 22, 0.28);
+  pointer-events: none;
+}
+

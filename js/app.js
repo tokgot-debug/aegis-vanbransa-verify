@@ -451,76 +451,64 @@
               </form>
             </div>
 
-            <!-- Right Live Scan Engine Card (Matches Screenshot) -->
-            <div class="lg:col-span-5">
-              <div class="rounded border border-stone-800/90 bg-[#0d0b0a]/90 backdrop-blur-xl p-6 sm:p-7 shadow-2xl relative overflow-hidden">
-                <!-- Top Header Row -->
-                <div class="flex items-center justify-between text-[11px] font-mono tracking-[0.18em] uppercase pb-4 border-b border-stone-800/90">
-                  <span class="text-stone-400">SCAN ENGINE &nbsp;·&nbsp; LIVE</span>
-                  <span class="inline-flex items-center gap-2 text-orange-500 font-semibold">
-                    <span class="w-2 h-2 rounded-full bg-orange-500 animate-ping"></span>
-                    SCORING
-                  </span>
+            <!-- Right: Futuristic 3D Rotating Luxury Crystal Decanter Showcase -->
+            <div class="lg:col-span-5 flex items-center justify-center">
+              <div class="aegis-holo-stage relative w-full max-w-[440px] h-[460px] flex items-center justify-center select-none group">
+                <!-- Ambient Quantum Amber Aura -->
+                <div class="absolute w-72 h-72 rounded-full bg-orange-500/20 blur-[72px] pointer-events-none"></div>
+                <div class="absolute w-44 h-64 rounded-full bg-amber-400/15 blur-[48px] pointer-events-none"></div>
+
+                <!-- 3D Orbital Gyroscope Telemetry Rings -->
+                <div class="aegis-orbit-ring-outer"></div>
+                <div class="aegis-orbit-ring-inner"></div>
+                <div class="aegis-orbit-ring-collar"></div>
+
+                <!-- Vertical Sweeping Quantum Laser Scan Beam -->
+                <div class="aegis-holo-scan-ring"></div>
+
+                <!-- Holographic Base Emitter Disk -->
+                <div class="aegis-pedestal-emitter"></div>
+
+                <!-- Floating Futuristic Glass Telemetry Badges -->
+                <div class="absolute top-6 right-2 sm:right-4 z-30 px-3.5 py-1.5 rounded-full bg-[#111312]/80 backdrop-blur-md border border-emerald-500/30 flex items-center gap-2 shadow-xl">
+                  <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <span class="text-[11px] font-mono tracking-wider text-emerald-300">ECDSA-P256 SEAL</span>
                 </div>
 
-                <!-- Animated Orange Progress Line -->
-                <div class="w-full bg-stone-900 h-[2px] mb-6 overflow-hidden">
-                  <div class="aegis-scan-progress"></div>
+                <div class="absolute top-28 left-0 sm:left-2 z-30 px-3.5 py-1.5 rounded-full bg-[#111312]/80 backdrop-blur-md border border-orange-500/30 flex items-center gap-2 shadow-xl">
+                  <i data-lucide="sparkles" class="w-3.5 h-3.5 text-orange-400"></i>
+                  <span class="text-[11px] font-mono tracking-wider text-orange-200">365nm UV · 99.8%</span>
                 </div>
 
-                <!-- Active Unit Identity Details -->
-                <div class="space-y-4">
-                  <div>
-                    <p class="font-mono text-sm sm:text-base text-stone-300 tracking-wide">${escapeHtml(p.serial)}</p>
-                    <p class="text-xs sm:text-sm text-stone-500 mt-0.5">${escapeHtml(p.name)} &nbsp;·&nbsp; ${escapeHtml(p.lastScannedLocation.split(",")[0])}</p>
+                <!-- Levitating + 360° 3D Volumetric Rotating Crystal Decanter -->
+                <a
+                  href="#/verify"
+                  title="Click to inspect unit identity in Scan Engine"
+                  class="aegis-decanter-levitate relative z-20 block cursor-pointer focus:outline-none"
+                >
+                  <div class="aegis-decanter-rotor">
+                    ${[-7, -4, -1.5, 0, 1.5, 4, 7].map((z, idx, arr) => {
+                      const isOuter = idx === 0 || idx === arr.length - 1;
+                      return `<img
+                        src="assets/hero-decanter-cutout.png"
+                        onerror="this.onerror=null;this.src='https://i.pinimg.com/736x/30/e6/5e/30e65eced1936cd2e7203ebbd3825b82.jpg';"
+                        alt="Aegis Protected Luxury Reserve Decanter"
+                        style="--slice-z: ${z}px;"
+                        class="aegis-decanter-slice ${isOuter ? "outer-face" : "core-glow"}"
+                      />`;
+                    }).join("")}
                   </div>
+                </a>
 
-                  <!-- Status Box & Risk Score -->
-                  <div class="flex items-center gap-4 pt-1">
-                    <span class="px-3.5 py-1.5 rounded border border-stone-800 bg-[#14110f] font-mono text-xs uppercase tracking-[0.16em] ${
-                      p.status === "AUTHENTIC"
-                        ? "text-emerald-400 border-emerald-500/30"
-                        : p.status === "COUNTERFEIT"
-                        ? "text-rose-400 border-rose-500/40"
-                        : "text-amber-500/90 border-amber-500/30"
-                    }">
-                      ${escapeHtml(p.verdictBadge || p.status)}
-                    </span>
-                    <span class="font-mono text-xs tracking-[0.16em] text-stone-400 uppercase">
-                      RISK <strong class="text-stone-200">${p.riskScore}</strong>
-                    </span>
-                  </div>
-
-                  <!-- Telemetry Flags List -->
-                  <div class="pt-2 space-y-1.5 font-mono text-xs text-stone-500">
-                    ${flags.map(flag => `
-                      <div class="flex items-center gap-2">
-                        <span class="text-orange-500/70">·</span>
-                        <span>${escapeHtml(flag)}</span>
-                      </div>
-                    `).join("")}
-                  </div>
-                </div>
-
-                <!-- Specimen Switcher Footer inside Scan Engine Card -->
-                <div class="mt-7 pt-4 border-t border-stone-800/80 flex flex-wrap items-center justify-between gap-2">
-                  <span class="text-[10px] font-mono uppercase tracking-wider text-stone-500">Switch Live Feed:</span>
-                  <div class="flex flex-wrap gap-1.5">
-                    ${window.SENTINEL_DATA.beverageDatabase.map(item => `
-                      <button
-                        type="button"
-                        data-quick-serial="${escapeHtml(item.serial)}"
-                        class="px-2 py-1 rounded text-[10px] font-mono border transition-all ${
-                          item.serial === p.serial
-                            ? "bg-orange-500/20 border-orange-500/50 text-orange-300"
-                            : "bg-stone-900/70 border-stone-800 text-stone-400 hover:text-white"
-                        }"
-                      >
-                        ${escapeHtml(item.serial.slice(0, 8))}
-                      </button>
-                    `).join("")}
-                  </div>
-                </div>
+                <!-- Bottom Floating Interactive Hologram Pill -->
+                <a
+                  href="#/verify"
+                  class="absolute bottom-3 z-30 px-4 py-2 rounded-full bg-[#111312]/90 hover:bg-[#191c1a] backdrop-blur-xl border border-white/10 hover:border-orange-500/50 flex items-center gap-3 shadow-2xl transition-all"
+                >
+                  <span class="w-2 h-2 rounded-full bg-orange-500 animate-ping"></span>
+                  <span class="text-xs font-medium text-white">${escapeHtml(p.name)}</span>
+                  <span class="text-[11px] font-mono text-orange-400">VERIFY ↗</span>
+                </a>
               </div>
             </div>
           </div>
